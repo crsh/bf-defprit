@@ -1,0 +1,6 @@
+name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+.Random.seed|object|75b894a32d8ebd65|||||||||||||||
+report|stem|e36337f48068b4ae|94bafd908983b80f|72762497b7f1f5b8|-237041703|report/prior_translation.html*report/prior_translation.pdf*report/prior_translation.qmd*_targets_full_aggregation/meta/progress*_targets_partial_aggregation/meta/progress*report/references.bib|t19261.9372643677s||7522578|file|local|vector|||136.999||System command quarto failed
+report_md|stem|da7e5646cbdfced7|596243de06efd9e6|1ec22aff42d78a6d|-80060071||t0s|f4066a65ff755f48|0|file|local|vector|||0||
+spellcheck_exceptions|stem|fa571cc6e40c5ddd|7263c16f69698457|a3dad144c40657ed|1200658335||t19261.9142229252s|11684eb95dbf8c0d|189|rds|local|vector|||0.001||
+spellcheck_report|stem|e9e7b2dbbfb469d6|5c773c5dadc67723|28ecb6a65474d6b9|-33163502||t19262.0171956755s|6aac70ce59868a33|131|rds|local|vector|||0.056||

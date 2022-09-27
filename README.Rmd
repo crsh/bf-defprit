@@ -1,0 +1,67 @@
+---
+output: github_document
+---
+
+```{r include = FALSE}
+library("targets")
+```
+
+
+# Supplement to *Bayes Factors for Mixed Models: Perspective on Responses*
+
+**Frederik Aust & Julia M. Haaf**
+
+This repository contains research products associated with the publication.
+We provide a Dockerfile, R scripts, and a Quarto document to reproduce the reported simulations.
+The Quarto document in the `reports` directory and the `_targets_*.R` scripts contain details about reported simulations and can be used to reproduce the results.
+With the help of [Quarto](https://quarto.org/) the `.qmd`-file can be rendered into a report of the simulation results in HTML format.
+
+
+## Recommended citation
+
+van Doorn et al. (in prep). Bayes Factors for Mixed Models: Perspective on Responses. *Computational Brain & Behavior*.
+
+## Software requirements
+
+The required software is detailed in the `DESCRIPTION` file.
+
+To run the Docker container, execute `_run_docker.sh`, e.g. `sh _run_docker.sh` in the terminal.
+This will recreate the software environment used to run the simulation.
+The environment can be interacted with in an RStudio instance in a web browser that will open automatically.
+
+## `targets` pipelines
+
+The simulations were run using reproducible pipelines defined with the `targets` package.
+To run the pipeline execute `_make.sh`, e.g. `sh _make.sh` in the terminal.
+This project contains three seperate but interdependent pipelines
+
+### Partial aggregation simulation
+
+```{r echo = FALSE, results = "asis"}
+cat("```mermaid")
+targets::tar_mermaid(store = "_targets_partial_aggregation") |> 
+  cat(sep = "\n")
+cat("\n```")
+```
+
+### Full aggregation simulation
+
+```{r echo = FALSE, results = "asis"}
+cat("```mermaid")
+targets::tar_mermaid(store = "_targets_full_aggregation") |> 
+  cat(sep = "\n")
+cat("\n```")
+```
+
+### Report
+
+```{r echo = FALSE, results = "asis"}
+cat("```mermaid")
+targets::tar_mermaid(store = "_targets_report") |> 
+  cat(sep = "\n")
+cat("\n```")
+```
+
+## Simulation data
+
+The `_targets*/objects` directories contain all (intermediary) simulation results in `RDS`-format, which can be readily imported into R using `targets::tar_load()` or `loadRDS()`.

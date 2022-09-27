@@ -1,0 +1,17 @@
+partial_aggregation:
+  reporter_make: summary
+  reporter_outdated: forecast
+  script: _targets_partial_aggregation.R
+  store: _targets_partial_aggregation
+  workers: '4'
+full_aggregation:
+  inherits: partial_aggregation
+  script: _targets_full_aggregation.R
+  store: _targets_full_aggregation
+report:
+  inherits: partial_aggregation
+  script: _targets_report.R
+  store: _targets_report
+  workers: '1'
+main:
+  inherits: report

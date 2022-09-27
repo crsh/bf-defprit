@@ -1,0 +1,1066 @@
+---
+title: "Translating priors from linear mixed models to repeated-measures ANOVA and paired $t$ tests"
+subtitle: "Supplement to *Bayes Factors for Mixed Models: Perspective on Responses*"
+author: "Frederik Aust & Julia Haaf"
+date: "`r Sys.Date()`"
+
+bibliography: ["references.bib"]
+
+toc: true
+number-sections: true
+reference-location: margin
+
+highlight-style: github
+theme: lumen
+
+execute:
+  keep-md: true
+
+knitr:
+  opts_chunk:
+    echo: false
+
+format:
+  html:
+    code-fold: true
+    self-contained: true
+    link-external-icon: true
+    citations-hover: true
+    footnotes-hover: true
+  pdf:
+    colorlinks: true
+    papersize: a4
+---
+
+```{r}
+#| include: false
+
+library("targets")
+
+library("dplyr")
+library("ggplot2")
+library("patchwork")
+```
+
+In @vandoorn2021, we give Example 1 in which Bayes factors in mixed models with standardized effect size parameterization [@rouder2012] change when error variance decreases.
+We assumed a simple repeated-measures design with $I$ participants responding $K$ times in each of two conditions.
+The maximal model for these data is our Model 6 with random intercepts $\alpha_i$ and random slopes $\theta_i$,
+
+$$
+\begin{aligned}
+y_{ijk} & \sim \mathcal{N}(\mu + \sigma_\epsilon (\alpha_i + x_j (\nu + \theta_i)), \sigma^2_\epsilon) \\ & \\
+\alpha_i & \sim \mathcal{N}(0, g_\alpha) \\
+\nu & \sim \mathcal{N}(0, g_{\nu}) \\
+\theta_i & \sim \mathcal{N}(0, g_\theta) \\ & \\
+g_{\alpha} & \sim \mathcal{IG}(0.5, 0.5~r_{\alpha}^2) \\
+g_{\nu} & \sim \mathcal{IG}(0.5, 0.5~r_{\nu}^2) \\
+g_{\theta} & \sim \mathcal{IG}(0.5, 0.5~r_{\theta}^2) \\ & \\
+(\mu, \sigma^2_\epsilon) & = 1/\sigma^2_\epsilon.
+\end{aligned}
+$$
+
+# Reduced error variance through aggregation
+
+Because priors are placed on standardized effect sizes, a reduction of $\sigma_\epsilon$ increases prior plausibility of larger effect sizes.
+In our Example 1, measurement error decreases as the number of aggregated trials $n$ increases, $\sigma\prime_\epsilon = \frac{\sigma_\epsilon}{\sqrt{n}}$,
+
+$$
+\begin{aligned}
+y_{ijk} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha_i + x_j (\nu + \theta_i)), \sigma\prime_\epsilon^{2}) \\ & \\
+\alpha_i & \sim \mathcal{N}(0, g_\alpha) \\
+\nu & \sim \mathcal{N}(0, g_\theta) \\
+\theta_i & \sim \mathcal{N}(0, g_\theta).
+\end{aligned}
+$$
+
+This further implies the priors
+
+$$
+\begin{aligned}
+\nu & \sim \mathcal{N}(0, g_{\nu}/\sqrt{n}) \\
+g_\alpha & \sim \mathcal{IG}(0.5, 0.5~r^2_{\alpha}/\sqrt{n}) \\
+g_\theta & \sim\mathcal{IG}(0.5, 0.5~r^2_{\theta}/\sqrt{n}).
+\end{aligned}
+$$
+
+Hence, to obtain equivalent Bayes factors the prior scales should be adjusted accordingly, $r\prime^2 = r^2 \sqrt{n}$.
+
+## Simulation
+
+```{r}
+Sys.setenv(TAR_PROJECT = "partial_aggregation")
+
+tar_load("n_s")
+tar_load("n_t")
+tar_load("mu")
+tar_load("nu")
+tar_load("sigma_alpha")
+tar_load("sigma_theta")
+tar_load("sigma_epsilon")
+```
+
+To test whether this prior adjustment works as intended across all levels of aggregation, we conducted a small simulation for the balanced null comparison.
+We simulated $K = `r n_t`$ trials for $I = `r n_s`$ participants ($\mu = `r mu`$; $\sigma_\alpha = `r sigma_alpha`$; $\nu = \{`r nu`\}$; $\sigma_\theta = \{`r sigma_theta`\}$; $\sigma_\epsilon = `r sigma_epsilon`$).
+As in our Example 1, the data were generated deterministically with identical condition and participant means as well as standard errors across all levels of aggregation ($n$).
+
+```{r}
+#| fig.height: 6
+#| fig.width: 6
+
+tar_read("agg_plot")
+```
+
+Horizontal lines represent $\log{\mathrm{BF}}$ for each level of $\sigma_\theta$ with $n = 1$ (no aggregation) as reference.
+The results confirm that the prior adjustment works well.
+Only when an effect is present and the random slope variance $\sigma_\theta^2$ is small, we observed a minor inflation of the Bayes factor for $n = 50$. This bias scaled with $\log{BF}$ and was negligible for small and inconsequential for large Bayes factors.
+
+# Full aggregation
+
+When aggregating each participant's data to a single observation per cell the data can analyzed in two ways: By modeling participants' (1) cell means using a one-way repeated-measures ANOVA, or (2) cell mean differences using a paired $t$-test.
+
+## Repeated-measures ANOVA
+
+When data are fully aggregated data (i.e., $n = K$), the random slopes variance $\sigma_\theta^2$ folds into the error variance $\sigma_\epsilon^2$.
+That is, Model 6 reduces to Model 4,
+
+$$
+\begin{aligned}
+\bar{y}_{ij\cdot} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha_i + x_j \nu), \sigma\prime_\epsilon^2 + \sigma_\theta^2/2) \\
+\alpha_i & \sim \mathcal{N}(0, g_\alpha \sqrt{\sigma_\theta^2}) \\
+\nu & \sim \mathcal{N}(0, g_{\nu} \sqrt{\sigma_\theta^2/2}).
+\end{aligned}
+$$
+
+The random slopes variance $\sigma_\theta^2$ is scaled by the orthonormal effect coding, $\pm \sqrt{2}/2$.
+Compared to partial aggregation, the adjustment for the fixed effect requires an additional factor that depends on a weighted ratio of random variance $\sigma^2_\theta$ and error variance $\sigma^2_\epsilon$,
+
+$$
+\begin{aligned}
+\sqrt{\sigma_\epsilon^2/K + \sigma_\theta^2/2} & = \sigma_\epsilon/\sqrt{K} \sqrt{1 + \frac{K\sigma^2_\theta}{2\sigma_\epsilon^2}} \\
+  & = \sigma_\epsilon/\sqrt{K} \sqrt{\frac{2\sigma_\epsilon^2 + K\sigma^2_\theta}{2\sigma_\epsilon^2}} \\
+  & = \sigma_\epsilon/\sqrt{K} \sqrt{\frac{2/K + \sigma^2_\theta/\sigma_\epsilon^2}{2/K}} \\
+\end{aligned}
+$$
+
+<!-- Again, to obtain equivalent Bayes factors the prior scales for fixed and random effects need to be adjusted accordingly, -->
+
+<!-- $$r\prime^2_\nu = r^2_\nu \sqrt{K} \sqrt{\frac{2\sigma_\epsilon^2}{2\sigma_\epsilon^2 + K\sigma^2_\theta}} = r^2_\nu \sqrt{K} \sqrt{\frac{2/K}{2/K + \sigma^2_\theta/\sigma_\epsilon^2}}$$ -->
+
+<!-- and -->
+
+<!-- $$r\prime^2_{\alpha} = r^2_{\alpha} \sqrt{K} \sqrt{\frac{\sigma_\epsilon^2}{\sigma_\epsilon^2 + K\sigma^2_\theta}} = r^2_{\alpha} \sqrt{K} \sqrt{\frac{1/K}{1/K + \sigma^2_\theta/\sigma_\epsilon^2}}.$$ -->
+
+For random intercepts, the additional correction factor is obtained by marginalizing over the dummy coded random effect, yielding a weight of 1 for the random slope variance.
+
+## $t$ Test
+
+For the paired $t$-test the prior adjustment additionally must account for the different model parameterization ($\pm 0.5$ vs. $\pm \sqrt{2}/2$),
+
+$$
+\begin{aligned}
+\bar{y}_{ij\cdot} - \bar{y}_{ij\cdot} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha_i + 0.5 \nu), \sigma\prime_\epsilon^2) \\
+& - \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha_i - 0.5 \nu), \sigma\prime_\epsilon^2) \\
+  & = \mathcal{N}(\sigma\prime_\epsilon \nu, 2\sigma\prime_\epsilon^2) \\ & \\
+\end{aligned}
+$$
+
+Rescaling the prior on $\nu$ to the orthonormal scale, $\sqrt{2}\nu$, yields the same adjustment as for the ANOVA prior,
+
+$$
+\begin{aligned}
+\sqrt{\sigma_\epsilon^2/K + \sigma_\theta^2/2} & = \sigma_\epsilon/\sqrt{K} \sqrt{1 + \frac{K\sigma^2_\theta}{2\sigma_\epsilon^2}} \\
+  & = \sigma_\epsilon/\sqrt{K} \sqrt{\frac{2\sigma_\epsilon^2 + K\sigma^2_\theta}{2\sigma_\epsilon^2}} \\
+  & = \sigma_\epsilon/\sqrt{K} \sqrt{\frac{2/K + \sigma^2_\theta/\sigma_\epsilon^2}{2/K}}. \\
+\end{aligned}
+$$
+
+Note that in the linear mixed model $\sigma_\theta^2$ is characterized by a probability distribution, which prohibits a translation of the prior in terms of an adjusted scaling factor.
+To test whether the adjustment can be approximated by using a point estimate, we conducted a simulation for balanced null comparisons.
+
+## Simulation
+
+```{r simulation-settings}
+Sys.setenv(TAR_PROJECT = "full_aggregation")
+
+tar_load("index")
+tar_load("n_s")
+tar_load("n_t")
+tar_load("mu")
+tar_load("nu")
+tar_load("sigma_alpha")
+tar_load("sigma_theta")
+tar_load("sigma_epsilon")
+```
+
+
+We randomly simulated $K = \{`r n_t`\}$ responses for $I = \{`r n_s`\}$ participants ($\mu = `r mu`$; $\sigma_\alpha = `r sigma_alpha`$; $\nu = \{`r nu`\}$; $\sigma_\theta = `r sigma_theta`$; $\sigma_\epsilon = \{`r sigma_epsilon`\}$) `r max(index)` times each.
+
+::: panel-tabset
+## Mixed model vs. t-test
+
+```{r simulation-results1}
+#| fig.width: 7
+#| fig.height: 7
+
+tar_read("lm_ttest_summary_plot") /
+tar_read("lm_ttest_summary_zoom_plot")
+```
+
+<details>
+
+<summary>Results split by all varied factors</summary>
+
+```{r simulation-results1-details}
+#| fig.height: 5
+#| fig.width: 6
+
+tar_read("lm_ttest_plot")
+tar_read("lm_ttest_large_n_plot")
+```
+
+</details>
+
+## Mixed model vs. RM-ANOVA
+
+```{r simulation-results2}
+#| fig.width: 7
+#| fig.height: 7
+
+tar_read("lm_anova_summary_plot") /
+  tar_read("lm_anova_summary_zoom_plot")
+```
+
+<details>
+
+<summary>Results split by all varied factors</summary>
+
+```{r simulation-results2-details}
+#| fig.height: 5
+#| fig.width: 6
+
+tar_read("lm_anova_plot")
+tar_read("lm_anova_large_n_plot")
+```
+
+</details>
+
+## RM-ANOVA vs. t-test
+
+```{r simulation-results3}
+#| fig.width: 7
+#| fig.height: 7
+
+tar_read("ttest_anova_summary_plot") /
+tar_read("ttest_anova_summary_zoom_plot")
+```
+
+<details>
+
+<summary>Results split by all varied factors</summary>
+
+```{r simulation-results3-details}
+#| fig.height: 5
+#| fig.width: 6
+
+tar_read("ttest_anova_plot")
+tar_read("ttest_anova_large_n_plot")
+```
+
+</details>
+:::
+
+When the error variance $\sigma_\epsilon^2$ is small or the sample size $I$ is large, the adjustments works well.
+However, compared to the linear mixed model, both aggregate analyses produced diverging Bayes factors.
+As illustrated by the following trend lines, the divergence increased as (1) the difference in random slope and error variance increased and (2) the number of participants decreased.
+The divergence of Bayes factors was more pronounced in the repeated-measures ANOVA than in the paired $t$-test, because priors on both fixed and random effects require adjustment.
+
+::: panel-tabset
+## Mixed model vs. t-test
+
+```{r trend-plots-ttest}
+#| fig.height: 4
+#| fig.width: 6
+
+tar_read("lm_ttest_trend_plot")
+```
+
+<details>
+
+<summary>Intercepts and slopes as a function of $I$ and $\sigma_\epsilon$</summary>
+
+```{r trend-plots-ttest-exploration}
+#| fig.height: 5
+#| fig.width: 5
+
+tar_load("lm_bf")
+tar_load("ttest_bf")
+tar_load("anova_bf")
+
+lm_fits <- cbind(lm_bf, bf2 = ttest_bf[, "bf"]) |> 
+  dplyr::group_by(n_s, sigma_epsilon) |> 
+  dplyr::do(
+    lm(
+      log(bf) ~ log(bf2)
+      , data = .
+      , weights = 1/error
+    ) |>
+    broom::tidy(conf.int = TRUE)
+  ) |> 
+  dplyr::select(-statistic)
+
+lm_fits |>
+    ggplot() +
+    aes(x = sigma_epsilon, y = estimate, group = n_s, color = n_s, ymin = conf.low, ymax = conf.high) +
+    geom_smooth(formula = y ~ x + I(sqrt(x)), method = "lm", se = FALSE, color = grey(0.7), aes(weight = 1/std.error), size = 0.5, linetype = "22") +
+    geom_hline(aes(yintercept = x), data = data.frame(x = c(0, 1), term = c("(Intercept)", "log(bf2)"))) +
+    # geom_vline(aes(xintercept = x), data = data.frame(x = c(0.25, sqrt(2)/4), term = c("(Intercept)", "log(bf)"))) +
+    geom_line() +
+    geom_errorbar(width = 0.05) +
+    geom_point() +
+    scale_color_viridis_c(
+        end = 0.8
+        , breaks = c(20, 50, 100, 200)
+        , option = "B"
+        , guide = guide_colorbar(barwidth = rel(0.75))
+    ) +
+    facet_grid(
+        term ~ ., scale = "free_y"
+        , labeller = label_bquote(rows = .(papaja:::sanitize_terms(ifelse(term == "log(bf2)", "Slope", term))))
+    ) +
+    labs(
+        x = bquote(sigma[epsilon])
+        , y = "Estimate (95% CI)"
+        , color = bquote(italic(I))
+    ) +
+    papaja::theme_apa(box = TRUE)
+
+lm_fits |>
+  ggplot() +
+  aes(x = n_s, y = estimate, group = sigma_epsilon, color = sigma_epsilon, ymin = conf.low, ymax = conf.high) +
+  geom_hline(aes(yintercept = x), data = data.frame(x = c(0, 1), term = c("(Intercept)", "log(bf2)"))) +
+  # geom_smooth(formula = y ~ x + I(1/x), method = "lm", se = FALSE, color = grey(0.7), aes(weight = 1/std.error)) +
+  geom_smooth(formula = y ~ x + I(sqrt(x)), method = "lm", se = FALSE, color = grey(0.7), aes(weight = 1/std.error), size = 0.5, linetype = "22") +
+  # geom_smooth(formula = y ~ x + I(log(x)), method = "lm", se = FALSE, color = grey(0.7), aes(weight = 1/std.error)) +
+  geom_line() +
+  geom_errorbar(width = 0.05) +
+  geom_point() +
+  scale_color_viridis_c(
+    end = 0.8
+    , breaks = c(0.1, 0.25, 0.5, 1, 2)
+    , guide = guide_colorbar(barwidth = rel(0.75))
+  ) +
+  facet_grid(
+    term ~ ., scale = "free_y"
+    , labeller = label_bquote(rows = .(papaja:::sanitize_terms(ifelse(term == "log(bf2)", "Slope", term))))
+  ) +
+  labs(
+    x = bquote(italic(I))
+    , y = "Estimate (95% CI)"
+    , color = bquote(sigma[epsilon])
+  ) +
+  papaja::theme_apa(box = TRUE)
+```
+
+</details>
+
+## Mixed model vs. RM-ANOVA
+
+```{r trend-plots-anova}
+#| fig.height: 4
+#| fig.width: 6
+
+tar_read("lm_anova_trend_plot")
+```
+
+<details>
+
+<summary>Intercepts and slopes as a function of $I$ and $\sigma_\epsilon$</summary>
+
+```{r trend-plots-anova-exploration}
+#| fig.height: 5
+#| fig.width: 5
+
+lm_fits <- cbind(lm_bf, bf2 = anova_bf[, "bf"]) |> 
+  dplyr::group_by(n_s, sigma_epsilon) |> 
+  dplyr::do(
+    lm(
+      log(bf) ~ log(bf2)
+      , data = .
+      , weights = 1/error
+    ) |>
+    broom::tidy(conf.int = TRUE)
+  ) |> 
+  dplyr::select(-statistic)
+
+lm_fits |>
+    ggplot() +
+    aes(x = sigma_epsilon, y = estimate, group = n_s, color = n_s, ymin = conf.low, ymax = conf.high) +
+    geom_smooth(formula = y ~ x + I(sqrt(x)), method = "lm", se = FALSE, color = grey(0.7), aes(weight = 1/std.error), size = 0.5, linetype = "22") +
+    geom_hline(aes(yintercept = x), data = data.frame(x = c(0, 1), term = c("(Intercept)", "log(bf2)"))) +
+    # geom_vline(aes(xintercept = x), data = data.frame(x = c(0.25, sqrt(2)/4), term = c("(Intercept)", "log(bf)"))) +
+    geom_line() +
+    geom_errorbar(width = 0.05) +
+    geom_point() +
+    scale_color_viridis_c(
+        end = 0.8
+        , breaks = c(20, 50, 100, 200)
+        , option = "B"
+        , guide = guide_colorbar(barwidth = rel(0.75))
+    ) +
+    facet_grid(
+        term ~ ., scale = "free_y"
+        , labeller = label_bquote(rows = .(papaja:::sanitize_terms(ifelse(term == "log(bf2)", "Slope", term))))
+    ) +
+    labs(
+        x = bquote(sigma[epsilon])
+        , y = "Estimate (95% CI)"
+        , color = bquote(italic(I))
+    ) +
+    papaja::theme_apa(box = TRUE)
+
+lm_fits |>
+  ggplot() +
+  aes(x = n_s, y = estimate, group = sigma_epsilon, color = sigma_epsilon, ymin = conf.low, ymax = conf.high) +
+  geom_hline(aes(yintercept = x), data = data.frame(x = c(0, 1), term = c("(Intercept)", "log(bf2)"))) +
+  # geom_smooth(formula = y ~ x + I(1/x), method = "lm", se = FALSE, color = grey(0.7), aes(weight = 1/std.error)) +
+  geom_smooth(formula = y ~ x + I(sqrt(x)), method = "lm", se = FALSE, color = grey(0.7), aes(weight = 1/std.error), size = 0.5, linetype = "22") +
+  # geom_smooth(formula = y ~ x + I(log(x)), method = "lm", se = FALSE, color = grey(0.7), aes(weight = 1/std.error)) +
+  geom_line() +
+  geom_errorbar(width = 0.05) +
+  geom_point() +
+  scale_color_viridis_c(
+    end = 0.8
+    , breaks = c(0.1, 0.25, 0.5, 1, 2)
+    , guide = guide_colorbar(barwidth = rel(0.75))
+  ) +
+  facet_grid(
+    term ~ ., scale = "free_y"
+    , labeller = label_bquote(rows = .(papaja:::sanitize_terms(ifelse(term == "log(bf2)", "Slope", term))))
+  ) +
+  labs(
+    x = bquote(italic(I))
+    , y = "Estimate (95% CI)"
+    , color = bquote(sigma[epsilon])
+  ) +
+  papaja::theme_apa(box = TRUE)
+```
+
+</details>
+:::
+
+```{r}
+#| eval: false
+
+lm_fits <- cbind(lm_bf, bf2 = ttest_bf[, "bf"]) |> 
+  dplyr::group_by(n_s, sigma_epsilon) |> 
+  dplyr::do(
+    lm(
+      log(bf) ~ log(bf2)
+      , data = .
+      , weights = 1/error
+    ) |>
+    broom::tidy(conf.int = TRUE)
+  ) |> 
+  dplyr::select(-statistic)
+
+lm_fits |> 
+  papaja::apa_num(digits = 3) |> 
+  dplyr::arrange(term, sigma_epsilon)
+
+lm_fits |> 
+  ggplot() +
+  aes(x = sigma_epsilon, y = estimate, group = n_s, color = n_s, ymin = conf.low, ymax = conf.high) +
+  geom_smooth(formula = y ~ x + I(x^2), method = "lm", se = FALSE, color = grey(0.7)) +
+  geom_hline(aes(yintercept = x), data = data.frame(x = c(0, 1), term = c("(Intercept)", "log(bf2)"))) +
+  geom_vline(aes(xintercept = x), data = data.frame(x = c(0.25, sqrt(2)/4), term = c("(Intercept)", "log(bf2)"))) +
+  geom_line() +
+  geom_errorbar(width = 0.05) +
+  geom_point() +
+  scale_color_viridis_c(
+    end = 0.8
+    , breaks = c(20, 50, 100, 200)
+    , option = "B"
+  ) +
+  facet_grid(
+    term ~ ., scale = "free_y"
+    , labeller = label_bquote(rows = .(papaja:::sanitize_terms(ifelse(term == "log(bf2)", "Slope", term))))
+  ) +
+  labs(
+    x = bquote(sigma[epsilon])
+    , y = "Estimate"
+    , color = bquote(italic(I))
+  ) +
+  papaja::theme_apa(box = TRUE)
+
+
+lm_fits |> 
+  dplyr::group_by(n_s) |> 
+  dplyr::filter(term == "log(bf2)") |> 
+  dplyr::do(
+    lm(
+      estimate ~ sigma_epsilon + I(sigma_epsilon^2)
+      , data = .
+    ) |>
+      broom::tidy(conf.int = TRUE)
+  ) |> 
+  dplyr::select(-statistic) |> 
+  # papaja::apa_num(digits = 3) |> 
+  dplyr::arrange(term, sigma_epsilon) |> 
+  ggplot() +
+    aes(x = n_s, y = estimate, ymin = conf.low, ymax = conf.high) +
+    geom_hline(aes(yintercept = x), data = data.frame(x = c(1, 0, 0), term = c("(Intercept)", "I(sigma_epsilon^2)", "sigma_epsilon"))) +
+    geom_errorbar(width = 0.05) +
+    geom_point() +
+    facet_wrap(~term) +
+  papaja::theme_apa(box = TRUE)
+
+
+
+
+
+lm_fits |> 
+  ggplot() +
+  aes(x = n_s, y = estimate, group = sigma_epsilon, color = sigma_epsilon, ymin = conf.low, ymax = conf.high) +
+  geom_hline(aes(yintercept = x), data = data.frame(x = c(0, 1), term = c("(Intercept)", "log(bf2)"))) +
+  geom_line() +
+  geom_errorbar(width = 0.05) +
+  geom_point() +
+  scale_color_viridis_c(
+    end = 0.8
+    , breaks = c(0.1, 0.25, 0.5, 1, 2)
+    , guide = guide_colorbar(
+      barwidth = rel(0.75)
+    )
+  ) +
+  facet_grid(
+    term ~ ., scale = "free_y"
+    , labeller = label_bquote(rows = .(papaja:::sanitize_terms(ifelse(term == "log(bf2)", "Slope", term))))
+  ) +
+  labs(
+    x = bquote(italic(I))
+    , y = "Estimate"
+    , color = bquote(sigma[epsilon])
+  ) +
+  papaja::theme_apa(box = TRUE)
+```
+
+<!-- To test whether the bias is related to hierarchical shrinkage of random intercept and slope variances or data variability, I used the mixed model estimates of random intercept and slope variances (i.e., posterior medians) instead of the true values to adjust the priors. -->
+
+<!-- This reduced a minor downward bias in Bayes factors in favor of the null but had little to no effect on the strong bias in large Bayes factors favoring the alternative. -->
+
+```{r}
+#| eval: false
+#| fig.height: 5
+#| fig.width: 6
+
+source("R/logbf_plot.R")
+library("ggplot2", quietly = TRUE, warn.conflicts = FALSE)
+
+tar_load(ttest_bf)
+tar_load(ttest_bf_var_hats)
+tar_load(lm_bf)
+
+cbind(ttest_bf_var_hats, bf2 = ttest_bf[, "bf"]) |>
+  dplyr::filter(n_s <= 50) |> 
+  dplyr::mutate(n_s = factor(n_s)) |>
+  logbf_plot(
+    xlab = "log BF  of ttestBF()"
+    , ylab = "log BF  of empirically adjusted ttestBF()"
+  )
+
+cbind(lm_bf, bf2 = ttest_bf_var_hats[, "bf"]) |>
+  dplyr::filter(n_s <= 50) |> 
+  dplyr::mutate(n_s = factor(n_s)) |>
+  logbf_plot(
+    xlab = "log BF  of lmBF()"
+    , ylab = "log BF  of empirically adjusted ttestBF()"
+  )
+```
+
+```{r}
+#| eval: false
+#| fig.height: 5
+#| fig.width: 6
+
+tar_load("anova_bf")
+tar_load("anova_bf_var_hats")
+tar_load("lm_bf")
+
+cbind(anova_bf_var_hats, bf2 = anova_bf[, "bf"]) |>
+  dplyr::filter(n_s <= 50) |> 
+  dplyr::mutate(n_s = factor(n_s)) |>
+  logbf_plot(
+    xlab = "log BF  of anovaBF()"
+    , ylab = "log BF  of empirically adjusted anovaBF()"
+  )
+
+cbind(lm_bf, bf2 = anova_bf_var_hats[, "bf"]) |>
+  dplyr::filter(n_s <= 50) |> 
+  dplyr::mutate(n_s = factor(n_s)) |>
+  logbf_plot(
+    xlab = "log BF  of lmBF()"
+    , ylab = "log BF  of empirically adjusted anovaBF()"
+  )
+```
+
+We examined how intercepts and slopes of the trend lines varied with error variance and number of participants.
+Using AIC and BIC, we compared several regression models that expressed the Bayes factors from the full mixed model (weighted by the reciprocal of their estimation error) as a function of Bayes factors from the corresponding paired $t$-test, sample size $I$, and error variance $\sigma_\epsilon^2$.
+We compared the same set of models for the Bayes factors from repeated-measures ANOVA and found the same winning model.
+The Bayes factors predicted by the selected model,
+
+```{r bias-exploration}
+#| eval: false
+
+bf_trends <- cbind(lm_bf, bf2 = ttest_bf[, "bf"]) |> 
+  dplyr::group_by(n_s, sigma_epsilon) |> 
+  dplyr::do(
+    lm(
+      log(bf2) ~ log(bf)
+      , data = .
+      , weights = 1/error
+    ) |>
+      broom::tidy()
+  ) |> 
+  dplyr::select(-statistic) |> 
+  dplyr::group_by(sigma_epsilon)
+
+bf_trends |> 
+  dplyr::filter(term == "log(bf)") |> 
+  dplyr::do(
+    lm(
+      # estimate ~ 1 + I(sqrt(n_s))
+      # estimate ~ 1 + I(1/n_s)
+      estimate ~ 1 + I(log(n_s))
+      , data = .
+      , weights = 1/std.error
+    ) |>
+      broom::tidy(conf.int = TRUE)
+  ) |> 
+  dplyr::select(-statistic) |> 
+  # papaja::apa_num(digits = 3)
+  dplyr::arrange(term, sigma_epsilon) |>
+  ggplot() +
+  aes(x = sigma_epsilon, y = estimate, ymin = conf.low, ymax = conf.high) +
+  # aes(x = 0.5/sigma_epsilon, y = estimate, ymin = conf.low, ymax = conf.high) +
+  # geom_hline(data = data.frame(estimate = c(1, 0), term = c("(Intercept)", "I(sqrt(n_s))")), aes(yintercept = estimate)) +
+  geom_hline(data = data.frame(estimate = c(1, 0), term = c("(Intercept)", "I(log(n_s))")), aes(yintercept = estimate)) +
+  geom_smooth(formula = y ~ I(x^2), method = "lm", aes(weight = 1.96/(conf.high-conf.low))) +
+  # geom_smooth(formula = y ~ I(1/x^2), method = "lm", aes(weight = 1.96/(conf.high-conf.low))) +
+  geom_errorbar(width = 0.05) +
+  geom_point() +
+  facet_wrap(~term, scales = "free_y") +
+  papaja::theme_apa(box = TRUE)
+
+
+bf_trends |> 
+  dplyr::filter(term == "log(bf)") |> 
+  dplyr::do(
+    lm(
+      # estimate ~ 1 + I(sqrt(n_s))
+      # estimate ~ 1 + I(1/n_s)
+      estimate ~ 1 + I(log(n_s))
+      , data = .
+      , weights = 1/std.error
+    ) |>
+      broom::tidy()
+  ) |> 
+  dplyr::select(-statistic) |> 
+  dplyr::filter(term == "(Intercept)") |>
+  (\(x) { lm(
+    # estimate ~ I(1/(0.5/sigma_epsilon)^2)
+    estimate ~ sigma_epsilon + I(sigma_epsilon^2)
+    # estimate ~ I(sigma_epsilon^2)
+    , data = x
+    , weights = 1/std.error
+  ) })() |> 
+  summary()
+
+bf_trends |> 
+  dplyr::filter(term == "log(bf)") |> 
+  dplyr::do(
+    lm(
+      # estimate ~ 1 + I(sqrt(n_s))
+      # estimate ~ 1 + I(1/n_s)
+      estimate ~ 1 + I(log(n_s))
+      , data = .
+      , weights = 1/std.error
+    ) |>
+      broom::tidy()
+  ) |> 
+  dplyr::select(-statistic) |> 
+  # dplyr::filter(term == "I(sqrt(n_s))") |>
+  # dplyr::filter(term == "I(1/n_s)") |>
+  dplyr::filter(term == "I(log(n_s))") |>
+  (\(x) { lm(
+    # estimate ~ I(1/(0.5/sigma_epsilon)^2)
+    estimate ~ sigma_epsilon + I(sigma_epsilon^2)
+    # estimate ~ 0 + I(sigma_epsilon^2)
+    , data = x
+    , weights = 1/std.error
+  ) })() |> 
+  summary()
+
+
+
+bf_trends |> 
+  dplyr::filter(term == "(Intercept)") |> 
+  dplyr::do(
+    glm(
+      estimate ~ 1 + I(sqrt(n_s))
+      # estimate ~ 1 + I(1/n_s)
+      # estimate ~ 1 + I(log(n_s))
+      , data = .
+      , weights = 1/std.error
+    ) |>
+      broom::tidy(conf.int = TRUE)
+  ) |> 
+  dplyr::select(-statistic) |> 
+  # papaja::apa_num(digits = 3)
+  dplyr::arrange(term, sigma_epsilon) |>
+  ggplot() +
+  aes(x = sigma_epsilon, y = estimate, ymin = conf.low, ymax = conf.high) +
+  # aes(x = 0.5/sigma_epsilon, y = estimate, ymin = conf.low, ymax = conf.high) +
+  # geom_smooth(formula = y ~ s(x, k = 5), method = "gam", fullrange = TRUE) +
+  geom_smooth(formula = y ~ x + I(sqrt(x)), method = "lm", aes(weight = 1.96/(conf.high-conf.low))) +
+  # geom_smooth(formula = y ~ x + I(1/x), method = "lm", aes(weight = 1.96/(conf.high-conf.low))) +
+  # geom_smooth(formula = y ~ x + I(log(x)), method = "lm", aes(weight = 1.96/(conf.high-conf.low))) +
+  # geom_smooth(formula = y ~ x + I(x^2), method = "lm", aes(weight = 1.96/(conf.high-conf.low))) +
+  geom_errorbar(width = 0.05) +
+  geom_point() +
+  facet_wrap(~term, scales = "free_y") +
+  papaja::theme_apa(box = TRUE)
+
+
+bf_trends |>
+  dplyr::filter(term == "(Intercept)") |> 
+  dplyr::do(
+    lm(
+      # estimate ~ 1 + I(sqrt(n_s))
+      # estimate ~ 1 + I(1/n_s)
+      estimate ~ 1 + I(log(n_s))
+      , data = .
+      , weights = 1/std.error
+    ) |>
+      broom::tidy()
+  ) |> 
+  dplyr::select(-statistic) |> 
+  dplyr::filter(term == "(Intercept)") |>
+  (\(x) { lm(
+    # estimate ~ 0 + I(1/(0.5/sigma_epsilon)) + I(1/(0.5/sigma_epsilon)^2)
+    estimate ~ sigma_epsilon + I(sqrt(sigma_epsilon))
+    # estimate ~ sigma_epsilon + I(log(sigma_epsilon^2))
+    , data = x
+    , weights = 1/std.error
+  ) })() |> summary()
+
+
+bf_trends |> 
+  dplyr::filter(term == "(Intercept)") |> 
+  dplyr::do(
+    lm(
+      # estimate ~ 1 + I(sqrt(n_s))
+      # estimate ~ 1 + I(1/n_s)
+      estimate ~ 1 + I(log(n_s))
+      , data = .
+      , weights = 1/std.error
+    ) |>
+      broom::tidy()
+  ) |> 
+  dplyr::select(-statistic) |> 
+  # dplyr::filter(term == "I(sqrt(n_s))") |>
+  # dplyr::filter(term == "I(1/n_s)") |>
+  dplyr::filter(term == "I(log(n_s))") |>
+  (\(x) { lm(
+    # estimate ~ 0 + I(1/(0.5/sigma_epsilon)) + I(1/(0.5/sigma_epsilon)^2)
+    estimate ~ sigma_epsilon + I(sqrt(sigma_epsilon))
+    # estimate ~ sigma_epsilon + I(log(sigma_epsilon^2))
+    , data = x
+    , weights = 1/std.error
+  ) })() |> summary()
+
+
+
+
+# correction5 <- lm(log(bf) ~ 1 + sigma_epsilon + I(log(sigma_epsilon)) + I(sqrt(n_s)) + I(sqrt(n_s)):sigma_epsilon + I(log(sigma_epsilon)):I(sqrt(n_s)) + I(log(bf2)) + I(log(bf2)):sigma_epsilon + I(log(bf2)):I(sigma_epsilon^2) + I(log(bf2)):I(sqrt(n_s)) + I(log(bf2)):sigma_epsilon:I(sqrt(n_s)) + I(log(bf2)):I(sigma_epsilon^2):I(sqrt(n_s)) , data = cbind(lm_bf, bf2 = ttest_bf[, "bf"]) |> mutate(logbf2 = log(bf2)), offset = logbf2)
+correction5 <- lm(log(bf) ~ 1 + sigma_epsilon + I(log(bf2)):sigma_epsilon + I(log(bf2)):I(sigma_epsilon^2) + I(log(bf2)):I(sqrt(n_s)) + I(log(bf2)):sigma_epsilon:I(sqrt(n_s)) + I(log(bf2)):I(sigma_epsilon^2):I(sqrt(n_s)) , data = cbind(lm_bf, bf2 = ttest_bf[, "bf"]) |> mutate(logbf2 = log(bf2)), offset = logbf2, weights = 1/error)
+# summary(correction5)
+# 
+# test <- predict(correction5, newdata = cbind(lm_bf, bf2 = ttest_bf[, "bf"]) |> mutate(logbf2 = log(bf2)))
+# 
+# layout(matrix(1:2, nrow = 1))
+# plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10, cex = scale(log(1/lm_bf[, "error"])), xlim = c(-5,5), ylim = c(-5, 5))
+# abline(0,1)
+# plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10, cex = scale(log(1/lm_bf[, "error"])))
+# abline(0,1)
+# 
+# layout(matrix(1:2, nrow = 1))
+# plot(1/lm_bf[, "bf"], 1/exp(test), col = lm_bf[, "sigma_epsilon"]*10, cex = scale(log(1/lm_bf[, "error"])), xlim = c(1, 50), ylim = c(1, 50))
+# abline(0,1)
+# plot(lm_bf[, "bf"], exp(test), col = lm_bf[, "sigma_epsilon"]*10, cex = scale(log(1/lm_bf[, "error"])), xlim = c(1, 50), ylim = c(1, 50))
+# abline(0,1)
+
+
+
+correction41 <- lm(
+  log(bf) ~ 0 +
+    sigma_epsilon + I(sqrt(sigma_epsilon)) +
+    I(sqrt(n_s)) + I(sqrt(n_s)):sigma_epsilon +
+    I(log(bf2)):I(sigma_epsilon^2) +
+    I(log(bf2)):I(log(n_s)) + I(log(bf2)):I(sigma_epsilon^2):I(log(n_s))
+  , data = cbind(lm_bf, bf2 = ttest_bf[, "bf"]) |> mutate(logbf2 = log(bf2))
+  , offset = logbf2
+  , weights = 1/error
+)
+# summary(correction41)
+
+test <- predict(correction41, newdata = cbind(lm_bf, bf2 = ttest_bf[, "bf"]) |> mutate(logbf2 = log(bf2)))
+
+layout(matrix(1:2, nrow = 1))
+plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10, cex = scale(log(1/lm_bf[, "error"])), xlim = c(-5,5), ylim = c(-5, 5))
+abline(0,1)
+plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10, cex = scale(log(1/lm_bf[, "error"])))
+abline(0,1)
+
+layout(matrix(1:2, nrow = 1))
+plot(1/lm_bf[, "bf"], 1/exp(test), col = lm_bf[, "sigma_epsilon"]*10, cex = scale(log(1/lm_bf[, "error"])), xlim = c(1, 50), ylim = c(1, 50))
+abline(0,1)
+plot(lm_bf[, "bf"], exp(test), col = lm_bf[, "sigma_epsilon"]*10, cex = scale(log(1/lm_bf[, "error"])), xlim = c(1, 50), ylim = c(1, 50))
+abline(0,1)
+
+
+
+
+# correction4 <- lm(log(bf) ~ 1 + sigma_epsilon + I(sqrt(sigma_epsilon)) + I(sqrt(n_s)) + I(sqrt(n_s)):sigma_epsilon + I(sqrt(sigma_epsilon)):I(sqrt(n_s)) + I(log(bf2)) + I(log(bf2)):sigma_epsilon + I(log(bf2)):I(sigma_epsilon^2) + I(log(bf2)):I(sqrt(n_s)) + I(log(bf2)):sigma_epsilon:I(sqrt(n_s)) + I(log(bf2)):I(sigma_epsilon^2):I(sqrt(n_s)) , data = cbind(lm_bf, bf2 = ttest_bf[, "bf"]))
+# correction4 <- lm(log(bf) ~ 0 + sigma_epsilon + I(sqrt(sigma_epsilon)) + I(sqrt(n_s)) + I(sqrt(n_s)):sigma_epsilon + I(sqrt(sigma_epsilon)):I(sqrt(n_s)) + I(log(bf2)):sigma_epsilon + I(log(bf2)):I(sigma_epsilon^2) + I(log(bf2)):I(sqrt(n_s)) + I(log(bf2)):sigma_epsilon:I(sqrt(n_s)) + I(log(bf2)):I(sigma_epsilon^2):I(sqrt(n_s)) , data = cbind(lm_bf, bf2 = ttest_bf[, "bf"]) |> mutate(logbf2 = log(bf2)), offset = logbf2)
+correction4 <- lm(
+  log(bf) ~ 0 +
+    sigma_epsilon + I(sqrt(sigma_epsilon)) +
+    I(sqrt(n_s)):sigma_epsilon +
+    I(log(bf2)):I(sigma_epsilon^2) +
+    I(log(bf2)):I(sqrt(n_s)) + I(log(bf2)):I(sigma_epsilon^2):I(sqrt(n_s))
+  , data = cbind(lm_bf, bf2 = ttest_bf[, "bf"]) |> mutate(logbf2 = log(bf2))
+  , offset = logbf2
+  , weights = 1/error
+)
+# summary(correction4)
+# 
+# test <- predict(correction4, newdata = cbind(lm_bf, bf2 = ttest_bf[, "bf"]) |> mutate(logbf2 = log(bf2)))
+# 
+# layout(matrix(1:2, nrow = 1))
+# plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10, cex = scale(log(1/lm_bf[, "error"])), xlim = c(-5,5), ylim = c(-5, 5))
+# abline(0,1)
+# plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10, cex = scale(log(1/lm_bf[, "error"])))
+# abline(0,1)
+# 
+# layout(matrix(1:2, nrow = 1))
+# plot(1/lm_bf[, "bf"], 1/exp(test), col = lm_bf[, "sigma_epsilon"]*10, cex = scale(log(1/lm_bf[, "error"])), xlim = c(1, 50), ylim = c(1, 50))
+# abline(0,1)
+# plot(lm_bf[, "bf"], exp(test), col = lm_bf[, "sigma_epsilon"]*10, cex = scale(log(1/lm_bf[, "error"])), xlim = c(1, 50), ylim = c(1, 50))
+# abline(0,1)
+
+
+
+
+
+
+
+# correction3 <- lm(log(bf) ~ 1 + sigma_epsilon + I(sqrt(sigma_epsilon)) + I(1/n_s) + I(1/n_s):sigma_epsilon + I(sqrt(sigma_epsilon)):I(1/n_s) + I(log(bf2)) + I(log(bf2)):sigma_epsilon + I(log(bf2)):I(1/n_s) + I(log(bf2)):sigma_epsilon:I(1/n_s) , data = cbind(lm_bf, bf2 = ttest_bf[, "bf"]))
+correction3 <- lm(log(bf) ~ 0 + sigma_epsilon + I(sqrt(sigma_epsilon)) + I(1/n_s) + I(1/n_s):sigma_epsilon + I(sqrt(sigma_epsilon)):I(1/n_s) + I(log(bf2)):I(1/n_s) + I(log(bf2)):sigma_epsilon:I(1/n_s) , data = cbind(lm_bf, bf2 = ttest_bf[, "bf"]) |> mutate(logbf2 = log(bf2)), offset = logbf2, weights = 1/error)
+# summary(correction3)
+# 
+# test <- predict(correction3, newdata = cbind(lm_bf, bf2 = ttest_bf[, "bf"]) |> mutate(logbf2 = log(bf2)))
+# 
+# layout(matrix(1:2, nrow = 1))
+# plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10, xlim = c(-5,5), ylim = c(-5, 5))
+# abline(0,1)
+# plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10)
+# abline(0,1)
+# 
+# layout(matrix(1:2, nrow = 1))
+# plot(1/lm_bf[, "bf"], 1/exp(test), col = lm_bf[, "sigma_epsilon"]*10, xlim = c(1, 50), ylim = c(1, 50))
+# abline(0,1)
+# plot(lm_bf[, "bf"], exp(test), col = lm_bf[, "sigma_epsilon"]*10, xlim = c(1, 50), ylim = c(1, 50))
+# abline(0,1)
+
+
+
+
+
+
+correction2 <- lm(log(bf) ~ 1 + sigma_epsilon + I(log(sigma_epsilon)) + I(1/n_s):sigma_epsilon:I(log(bf2)) + I(1/n_s):I(log(bf2)), data = cbind(lm_bf, bf2 = ttest_bf[, "bf"]) |> mutate(logbf2 = log(bf2)), offset = logbf2, weights = 1/error)
+# summary(correction2)
+# 
+# test <- predict(correction2, newdata = cbind(lm_bf, bf2 = ttest_bf[, "bf"]) |> mutate(logbf2 = log(bf2)))
+# 
+# layout(matrix(1:2, nrow = 1))
+# plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10, xlim = c(-5,5), ylim = c(-5, 5))
+# abline(0,1)
+# plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10)
+# abline(0,1)
+# 
+# layout(matrix(1:2, nrow = 1))
+# plot(1/lm_bf[, "bf"], 1/exp(test), col = lm_bf[, "sigma_epsilon"]*10, xlim = c(1, 50), ylim = c(1, 50))
+# abline(0,1)
+# plot(lm_bf[, "bf"], exp(test), col = lm_bf[, "sigma_epsilon"]*10, xlim = c(1, 50), ylim = c(1, 50))
+# abline(0,1)
+
+
+# test <- 
+#   sqrt(2)/2 + 
+#   -log(sqrt(2*pi))*lm_bf[, "sigma_epsilon"] +
+#   log(sqrt(2))*log(lm_bf[, "sigma_epsilon"]) + 
+#   log(ttest_bf[, "bf"]) + 
+#   4*log(ttest_bf[, "bf"])/lm_bf[, "n_s"] + 
+#   -pi^2*log(ttest_bf[, "bf"])*lm_bf[, "sigma_epsilon"]/lm_bf[, "n_s"]
+# 
+# layout(matrix(1:2, nrow = 1))
+# plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10, xlim = c(-5,5), ylim = c(-5, 5))
+# abline(0,1)
+# plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10)
+# abline(0,1)
+
+
+
+
+
+correction <- lm(
+  log(bf) ~ 0 + 
+    I(log(sigma_epsilon^2)) +
+    sigma_epsilon:I(log(bf2)) +
+    sigma_epsilon + I(log(n_s)) + I(log(n_s)):sigma_epsilon + I(log(n_s)):I(log(sigma_epsilon^2)) + I(log(bf2)) + I(log(n_s)):I(log(sigma_epsilon^2)):I(log(bf2))
+  , data = cbind(lm_bf, bf2 = ttest_bf[, "bf"])
+  , weights = 1/error
+)
+# summary(correction)
+# 
+# correction <- lm(log(bf) ~ 0 + sigma_epsilon + I(log(bf2)) + sigma_epsilon:I(log(bf2)) + sigma_epsilon:I(log(bf2)) + I(log(n_s)):I(log(sigma_epsilon^2)):I(log(bf2)), data = cbind(lm_bf, bf2 = ttest_bf[, "bf"]))
+# summary(correction)
+# 
+# test <- predict(correction, newdata = cbind(lm_bf, bf2 = ttest_bf[, "bf"]))
+# 
+# layout(matrix(1:2, nrow = 1))
+# plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10, xlim = c(-5,5), ylim = c(-5, 5))
+# abline(0,1)
+# plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10)
+# abline(0,1)
+# 
+# 
+# test <- 
+#   sqrt(2)/2 + 
+#   -log(sqrt(2*pi))*lm_bf[, "sigma_epsilon"] +
+#   log(sqrt(2))*log(lm_bf[, "sigma_epsilon"]) + 
+#   log(ttest_bf[, "bf"]) + 
+#   4*log(ttest_bf[, "bf"])/lm_bf[, "n_s"] + 
+#   -pi^2*log(ttest_bf[, "bf"])*lm_bf[, "sigma_epsilon"]/lm_bf[, "n_s"]
+# 
+# layout(matrix(1:2, nrow = 1))
+# plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10, xlim = c(-5,5), ylim = c(-5, 5))
+# abline(0,1)
+# plot(log(lm_bf[, "bf"]), test, col = lm_bf[, "sigma_epsilon"]*10)
+# abline(0,1)
+
+
+AIC(correction, correction2, correction3, correction4, correction41, correction42, correction5)
+BIC(correction, correction2, correction3, correction4, correction41, correction42, correction5)
+```
+
+$$
+\begin{aligned}
+\log\mathrm{BF_{LMM}} = & ~ b_1 \sigma_\epsilon + b_2 \sqrt{\sigma_\epsilon} + b_3 \sqrt{I} + b_4 \sqrt{I} \sigma_\epsilon +\\
+    & ~\log \mathrm{BF} (1 + b_5 \sigma_\epsilon^2 + b_6 \log I + b_7 \sigma_\epsilon^2 \log I),
+\end{aligned}
+$$
+
+largely offset divergences between linear mixed model and aggregate analyses.
+
+::: panel-tabset
+## Mixed model vs. t-test
+
+```{r bias-correction-ttest}
+#| fig.width: 7
+#| fig.height: 7
+
+tar_read("lm_ttest_corrected_summary_plot") /
+tar_read("lm_ttest_corrected_summary_zoom_plot")
+```
+
+<details>
+
+<summary>Estimated regression coefficients</summary>
+
+```{r bias-correction-ttest-coef}
+attr(
+    tar_read("lm_ttest_logbf")
+    , "correction_model"
+) |> 
+  papaja::apa_print(digits = 3) |> 
+  papaja::df_into_label() |> 
+  (\(x) x$table |> 
+    mutate(
+       term = gsub("Sigma epsilon", "$\\\\sigma_\\\\epsilon$", term)
+       , term = gsub("Isigma epsilon\\^2", "$\\\\sigma_\\\\epsilon^2$", term)
+       , term = gsub("Isqrtsigma epsilon", "$\\\\sqrt{\\\\sigma_\\\\epsilon}$", term)
+       , term = gsub("Isqrtn s", "$\\\\sqrt{I}$", term)
+       , term = gsub("Ilogn s", "$\\\\log I$", term)
+       , term = gsub("Ilogbf2", "$\\\\log \\\\mathrm{BF}$", term)
+    )
+  )() |> 
+  papaja::apa_table(
+    caption = "Results for regression of $\\log \\mathrm{BF}$ from linear mixed models on $\\log \\mathrm{BF}$ from paired t-tests."
+    , format = "markdown"
+    , escape = FALSE
+    , align = "lrcrr"
+  )
+```
+
+
+</details>
+
+## Mixed model vs. ANOVA
+
+```{r bias-correction-anova}
+#| fig.width: 7
+#| fig.height: 7
+
+tar_read("lm_anova_corrected_summary_plot") /
+tar_read("lm_anova_corrected_summary_zoom_plot")
+```
+
+<details>
+
+<summary>Estimated regression coefficients</summary>
+
+```{r bias-correction-anova-coef}
+attr(
+    tar_read("lm_anova_logbf")
+    , "correction_model"
+) |> 
+  papaja::apa_print(digits = 3) |> 
+  papaja::df_into_label() |> 
+  (\(x) x$table |> 
+    mutate(
+       term = gsub("Sigma epsilon", "$\\\\sigma_\\\\epsilon$", term)
+       , term = gsub("Isigma epsilon\\^2", "$\\\\sigma_\\\\epsilon^2$", term)
+       , term = gsub("Isqrtsigma epsilon", "$\\\\sqrt{\\\\sigma_\\\\epsilon}$", term)
+       , term = gsub("Isqrtn s", "$\\\\sqrt{I}$", term)
+       , term = gsub("Ilogn s", "$\\\\log I$", term)
+       , term = gsub("Ilogbf2", "$\\\\log \\\\mathrm{BF}$", term)
+    )
+  )() |> 
+  papaja::apa_table(
+    caption = "Results for regression of $\\log \\mathrm{BF}$ from linear mixed models on $\\log \\mathrm{BF}$ from repeated-measures ANOVAs."
+    , format = "markdown"
+    , escape = FALSE
+    , align = "lrcrr"
+  )
+```
+
+
+</details>
+
+:::
+
+```{r exit}
+Sys.setenv(TAR_PROJECT = "report")
+```
+

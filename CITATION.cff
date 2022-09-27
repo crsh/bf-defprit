@@ -1,0 +1,39 @@
+# -----------------------------------------------------------
+# CITATION file created with {cffr} R package, v0.1.0
+# See also: https://docs.ropensci.org/cffr/
+# -----------------------------------------------------------
+ 
+cff-version: 1.2.0
+message: 'To cite package "bf-defprit" in publications use:'
+type: software
+license: CC-BY-4.0
+title: 'bf-defprit: Explore Bayes Factors for Mixed Models'
+version: 0.1.0
+abstract: Functions to run simulations on translations of prior scales from linear
+  mixed models with standardized effect size parameterization to corresponding repeated-measures
+  ANOVA and paired t-tests.
+authors:
+- family-names: Aust
+  given-names: Frederik
+  orcid: https://orcid.org/0000-0003-4900-788X
+preferred-citation:
+  type: manual
+  title: 'bf-defprit: Explore Bayes Factors for Mixed Models'
+  authors:
+  - family-names: Aust
+    given-names: Frederik
+    orcid: https://orcid.org/0000-0003-4900-788X
+  version: 0.1.0
+  abstract: Functions to run simulations on translations of prior scales from linear
+    mixed models with standardized effect size parameterization to corresponding repeated-measures
+    ANOVA and paired t-tests.
+  contact:
+  - family-names: Aust
+    given-names: Frederik
+    orcid: https://orcid.org/0000-0003-4900-788X
+  license: CC-BY-4.0
+  year: '2022'
+contact:
+- family-names: Aust
+  given-names: Frederik
+  orcid: https://orcid.org/0000-0003-4900-788X

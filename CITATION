@@ -1,0 +1,14 @@
+citHeader("To cite bf-defprit in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = {Bayes Factors for Mixed Models: Perspective on Responses},
+  author   = {{van Doorn}, Johnny and Aust, Frederik and Haaf, Julia M. and Stefan, Angelika M. and Wagenmakers, Eric-Jan},
+  journal  = {Computational Brain & Behavior},
+  year     = {2022},
+  volume   = ,
+  number   = ,
+  pages    = ,
+  url      = ,
+  doi = ,
+)
