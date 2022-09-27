@@ -25,12 +25,13 @@ format:
     code-fold: true
     standalone: true
     embed-resources: true
+    self-contained: true
     link-external-icon: true
     citations-hover: true
     footnotes-hover: true
-  pdf:
-    colorlinks: true
-    papersize: a4
+  # pdf:
+  #   colorlinks: true
+  #   papersize: a4
 ---
 
 ```{r}

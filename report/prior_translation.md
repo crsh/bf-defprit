@@ -25,14 +25,14 @@ format:
     code-fold: true
     standalone: true
     embed-resources: true
+    self-contained: true
     link-external-icon: true
     citations-hover: true
     footnotes-hover: true
-  pdf:
-    colorlinks: true
-    papersize: a4
+  # pdf:
+  #   colorlinks: true
+  #   papersize: a4
 ---
-
 
 
 
@@ -41,7 +41,6 @@ format:
 In @vandoorn2021, we give Example 1 in which Bayes factors in mixed models with standardized effect size parameterization [@rouder2012] change when error variance decreases.
 We assumed a simple repeated-measures design with $I$ participants responding $K$ times in each of two conditions.
 The maximal model for these data is our Model 6 with random intercepts $\alpha_i$ and random slopes $\theta_i$,
-
 
 
 
@@ -60,12 +59,10 @@ $$
 
 
 
-
 # Reduced error variance through aggregation
 
 Because priors are placed on standardized effect sizes, a reduction of $\sigma_\epsilon$ increases prior plausibility of larger effect sizes.
 In our Example 1, measurement error decreases as the number of aggregated trials $n$ increases, $\sigma\prime_\epsilon = \frac{\sigma_\epsilon}{\sqrt{n}}$,
-
 
 
 
@@ -80,9 +77,7 @@ $$
 
 
 
-
 This further implies the priors
-
 
 
 
@@ -96,17 +91,14 @@ $$
 
 
 
-
 Hence, to obtain equivalent Bayes factors the prior scales should be adjusted accordingly, $r\prime^2 = r^2 \sqrt{n}$.
 
 ## Simulation
 
 
-
 ::: {.cell}
 
 :::
-
 
 
 To test whether this prior adjustment works as intended across all levels of aggregation, we conducted a small simulation for the balanced null comparison.
@@ -114,13 +106,11 @@ We simulated $K = 100$ trials for $I = 20$ participants ($\mu = 1$; $\sigma_\alp
 As in our Example 1, the data were generated deterministically with identical condition and participant means as well as standard errors across all levels of aggregation ($n$).
 
 
-
 ::: {.cell}
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/unnamed-chunk-6-1.pdf)
+![](prior_translation_files/figure-html/unnamed-chunk-6-1.png){width=576}
 :::
 :::
-
 
 
 Horizontal lines represent $\log{\mathrm{BF}}$ for each level of $\sigma_\theta$ with $n = 1$ (no aggregation) as reference.
@@ -138,7 +128,6 @@ That is, Model 6 reduces to Model 4,
 
 
 
-
 $$
 \begin{aligned}
 \bar{y}_{ij\cdot} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha_i + x_j \nu), \sigma\prime_\epsilon^2 + \sigma_\theta^2/2) \\
@@ -149,10 +138,8 @@ $$
 
 
 
-
 The random slopes variance $\sigma_\theta^2$ is scaled by the orthonormal effect coding, $\pm \sqrt{2}/2$.
 Compared to partial aggregation, the adjustment for the fixed effect requires an additional factor that depends on a weighted ratio of random variance $\sigma^2_\theta$ and error variance $\sigma^2_\epsilon$,
-
 
 
 
@@ -163,7 +150,6 @@ $$
   & = \sigma_\epsilon/\sqrt{K} \sqrt{\frac{2/K + \sigma^2_\theta/\sigma_\epsilon^2}{2/K}} \\
 \end{aligned}
 $$
-
 
 
 
@@ -183,7 +169,6 @@ For the paired $t$-test the prior adjustment additionally must account for the d
 
 
 
-
 $$
 \begin{aligned}
 \bar{y}_{ij\cdot} - \bar{y}_{ij\cdot} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha_i + 0.5 \nu), \sigma\prime_\epsilon^2) \\
@@ -194,9 +179,7 @@ $$
 
 
 
-
 Rescaling the prior on $\nu$ to the orthonormal scale, $\sqrt{2}\nu$, yields the same adjustment as for the ANOVA prior,
-
 
 
 
@@ -210,18 +193,15 @@ $$
 
 
 
-
 Note that in the linear mixed model $\sigma_\theta^2$ is characterized by a probability distribution, which prohibits a translation of the prior in terms of an adjusted scaling factor.
 To test whether the adjustment can be approximated by using a point estimate, we conducted a simulation for balanced null comparisons.
 
 ## Simulation
 
 
-
 ::: {.cell}
 
 :::
-
 
 
 
@@ -231,13 +211,11 @@ We randomly simulated $K = \{5, 25, 100\}$ responses for $I = \{20, 50, 100, 200
 ## Mixed model vs. t-test
 
 
-
 ::: {.cell}
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/simulation-results1-1.pdf)
+![](prior_translation_files/figure-html/simulation-results1-1.png){width=672}
 :::
 :::
-
 
 
 <details>
@@ -245,17 +223,15 @@ We randomly simulated $K = \{5, 25, 100\}$ responses for $I = \{20, 50, 100, 200
 <summary>Results split by all varied factors</summary>
 
 
-
 ::: {.cell}
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/simulation-results1-details-1.pdf)
+![](prior_translation_files/figure-html/simulation-results1-details-1.png){width=576}
 :::
 
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/simulation-results1-details-2.pdf)
+![](prior_translation_files/figure-html/simulation-results1-details-2.png){width=576}
 :::
 :::
-
 
 
 </details>
@@ -263,13 +239,11 @@ We randomly simulated $K = \{5, 25, 100\}$ responses for $I = \{20, 50, 100, 200
 ## Mixed model vs. RM-ANOVA
 
 
-
 ::: {.cell}
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/simulation-results2-1.pdf)
+![](prior_translation_files/figure-html/simulation-results2-1.png){width=672}
 :::
 :::
-
 
 
 <details>
@@ -277,17 +251,15 @@ We randomly simulated $K = \{5, 25, 100\}$ responses for $I = \{20, 50, 100, 200
 <summary>Results split by all varied factors</summary>
 
 
-
 ::: {.cell}
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/simulation-results2-details-1.pdf)
+![](prior_translation_files/figure-html/simulation-results2-details-1.png){width=576}
 :::
 
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/simulation-results2-details-2.pdf)
+![](prior_translation_files/figure-html/simulation-results2-details-2.png){width=576}
 :::
 :::
-
 
 
 </details>
@@ -295,13 +267,11 @@ We randomly simulated $K = \{5, 25, 100\}$ responses for $I = \{20, 50, 100, 200
 ## RM-ANOVA vs. t-test
 
 
-
 ::: {.cell}
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/simulation-results3-1.pdf)
+![](prior_translation_files/figure-html/simulation-results3-1.png){width=672}
 :::
 :::
-
 
 
 <details>
@@ -309,17 +279,15 @@ We randomly simulated $K = \{5, 25, 100\}$ responses for $I = \{20, 50, 100, 200
 <summary>Results split by all varied factors</summary>
 
 
-
 ::: {.cell}
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/simulation-results3-details-1.pdf)
+![](prior_translation_files/figure-html/simulation-results3-details-1.png){width=576}
 :::
 
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/simulation-results3-details-2.pdf)
+![](prior_translation_files/figure-html/simulation-results3-details-2.png){width=576}
 :::
 :::
-
 
 
 </details>
@@ -334,13 +302,11 @@ The divergence of Bayes factors was more pronounced in the repeated-measures ANO
 ## Mixed model vs. t-test
 
 
-
 ::: {.cell}
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/trend-plots-ttest-1.pdf)
+![](prior_translation_files/figure-html/trend-plots-ttest-1.png){width=576}
 :::
 :::
-
 
 
 <details>
@@ -348,17 +314,15 @@ The divergence of Bayes factors was more pronounced in the repeated-measures ANO
 <summary>Intercepts and slopes as a function of $I$ and $\sigma_\epsilon$</summary>
 
 
-
 ::: {.cell}
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/trend-plots-ttest-exploration-1.pdf)
+![](prior_translation_files/figure-html/trend-plots-ttest-exploration-1.png){width=480}
 :::
 
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/trend-plots-ttest-exploration-2.pdf)
+![](prior_translation_files/figure-html/trend-plots-ttest-exploration-2.png){width=480}
 :::
 :::
-
 
 
 </details>
@@ -366,13 +330,11 @@ The divergence of Bayes factors was more pronounced in the repeated-measures ANO
 ## Mixed model vs. RM-ANOVA
 
 
-
 ::: {.cell}
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/trend-plots-anova-1.pdf)
+![](prior_translation_files/figure-html/trend-plots-anova-1.png){width=576}
 :::
 :::
-
 
 
 <details>
@@ -380,28 +342,24 @@ The divergence of Bayes factors was more pronounced in the repeated-measures ANO
 <summary>Intercepts and slopes as a function of $I$ and $\sigma_\epsilon$</summary>
 
 
-
 ::: {.cell}
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/trend-plots-anova-exploration-1.pdf)
+![](prior_translation_files/figure-html/trend-plots-anova-exploration-1.png){width=480}
 :::
 
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/trend-plots-anova-exploration-2.pdf)
+![](prior_translation_files/figure-html/trend-plots-anova-exploration-2.png){width=480}
 :::
 :::
-
 
 
 </details>
 :::
 
 
-
 ::: {.cell}
 
 :::
-
 
 
 <!-- To test whether the bias is related to hierarchical shrinkage of random intercept and slope variances or data variability, I used the mixed model estimates of random intercept and slope variances (i.e., posterior medians) instead of the true values to adjust the priors. -->
@@ -409,7 +367,6 @@ The divergence of Bayes factors was more pronounced in the repeated-measures ANO
 <!-- This reduced a minor downward bias in Bayes factors in favor of the null but had little to no effect on the strong bias in large Bayes factors favoring the alternative. -->
 
 
-
 ::: {.cell}
 
 :::
@@ -417,14 +374,12 @@ The divergence of Bayes factors was more pronounced in the repeated-measures ANO
 ::: {.cell}
 
 :::
-
 
 
 We examined how intercepts and slopes of the trend lines varied with error variance and number of participants.
 Using AIC and BIC, we compared several regression models that expressed the Bayes factors from the full mixed model (weighted by the reciprocal of their estimation error) as a function of Bayes factors from the corresponding paired $t$-test, sample size $I$, and error variance $\sigma_\epsilon^2$.
 We compared the same set of models for the Bayes factors from repeated-measures ANOVA and found the same winning model.
 The Bayes factors predicted by the selected model,
-
 
 
 ::: {.cell}
@@ -441,26 +396,22 @@ $$
 
 
 
-
 largely offset divergences between linear mixed model and aggregate analyses.
 
 ::: panel-tabset
 ## Mixed model vs. t-test
 
 
-
 ::: {.cell}
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/bias-correction-ttest-1.pdf)
+![](prior_translation_files/figure-html/bias-correction-ttest-1.png){width=672}
 :::
 :::
-
 
 
 <details>
 
 <summary>Estimated regression coefficients</summary>
-
 
 
 ::: {.cell}
@@ -484,25 +435,21 @@ $\log \mathrm{BF}$ $\times$ $\sigma_\epsilon^2$ $\times$ $\log I$     0.039    [
 
 
 
-
 </details>
 
 ## Mixed model vs. ANOVA
 
 
-
 ::: {.cell}
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/bias-correction-anova-1.pdf)
+![](prior_translation_files/figure-html/bias-correction-anova-1.png){width=672}
 :::
 :::
-
 
 
 <details>
 
 <summary>Estimated regression coefficients</summary>
-
 
 
 ::: {.cell}
@@ -526,11 +473,9 @@ $\log \mathrm{BF}$ $\times$ $\sigma_\epsilon^2$ $\times$ $\log I$     0.049    [
 
 
 
-
 </details>
 
 :::
-
 
 
 ::: {.cell}

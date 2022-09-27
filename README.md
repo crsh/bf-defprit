@@ -97,35 +97,34 @@ graph LR
 ``` mermaid
 graph LR
   subgraph legend
-    x7420bd9270f8d27d([""Up to date""]):::uptodate --- x0a52b03877696646([""Outdated""]):::outdated
-    x0a52b03877696646([""Outdated""]):::outdated --- x70a5fa6bea6f298d[""Pattern""]:::none
+    x7420bd9270f8d27d([""Up to date""]):::uptodate --- x70a5fa6bea6f298d[""Pattern""]:::none
     x70a5fa6bea6f298d[""Pattern""]:::none --- xbf4603d6c2c2ad6b([""Stem""]):::none
     xbf4603d6c2c2ad6b([""Stem""]):::none --- x5bffbffeae195fc9{{""Object""}}:::none
     x5bffbffeae195fc9{{""Object""}}:::none --- xf0bce276fe2b9d3e>""Function""]:::none
   end
   subgraph Graph
-    xb115d6582cfd771d{{"default_scales"}}:::outdated --> xe86e0eb83252331d>"logbf_plot"]:::outdated
-    xb115d6582cfd771d{{"default_scales"}}:::outdated --> xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::outdated
-    x98aca552ca5e76e9{{"default_theme"}}:::uptodate --> xe86e0eb83252331d>"logbf_plot"]:::outdated
-    x98aca552ca5e76e9{{"default_theme"}}:::uptodate --> xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::outdated
+    xb115d6582cfd771d{{"default_scales"}}:::uptodate --> xe86e0eb83252331d>"logbf_plot"]:::uptodate
+    xb115d6582cfd771d{{"default_scales"}}:::uptodate --> xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate
+    x98aca552ca5e76e9{{"default_theme"}}:::uptodate --> xe86e0eb83252331d>"logbf_plot"]:::uptodate
+    x98aca552ca5e76e9{{"default_theme"}}:::uptodate --> xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate
     x98aca552ca5e76e9{{"default_theme"}}:::uptodate --> x061b7c77ec2aea53>"logbf_trend_plot"]:::uptodate
     x1771563b5781393f>"get_trial_batches"]:::uptodate --> x8a751a0886aa2602>"sim_quantile_data"]:::uptodate
-    x329b0a648be700a4["anova_bf"]:::uptodate --> x944705ecb5bda702(["ttest_anova_plot"]):::outdated
-    xe86e0eb83252331d>"logbf_plot"]:::outdated --> x944705ecb5bda702(["ttest_anova_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> x944705ecb5bda702(["ttest_anova_plot"]):::outdated
-    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> x944705ecb5bda702(["ttest_anova_plot"]):::outdated
+    x329b0a648be700a4["anova_bf"]:::uptodate --> x944705ecb5bda702(["ttest_anova_plot"]):::uptodate
+    xe86e0eb83252331d>"logbf_plot"]:::uptodate --> x944705ecb5bda702(["ttest_anova_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> x944705ecb5bda702(["ttest_anova_plot"]):::uptodate
+    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> x944705ecb5bda702(["ttest_anova_plot"]):::uptodate
     x4abc4a40bd190013["lm_bf"]:::uptodate --> x73752a944d421f45(["lm_ttest_trend_plot"]):::uptodate
     x061b7c77ec2aea53>"logbf_trend_plot"]:::uptodate --> x73752a944d421f45(["lm_ttest_trend_plot"]):::uptodate
     xeaf79493baa34293(["n_s"]):::uptodate --> x73752a944d421f45(["lm_ttest_trend_plot"]):::uptodate
     x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> x73752a944d421f45(["lm_ttest_trend_plot"]):::uptodate
-    x4abc4a40bd190013["lm_bf"]:::uptodate --> x48f0f510e049f6d0(["lm_ttest_summary_zoom_plot"]):::outdated
-    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::outdated --> x48f0f510e049f6d0(["lm_ttest_summary_zoom_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> x48f0f510e049f6d0(["lm_ttest_summary_zoom_plot"]):::outdated
-    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> x48f0f510e049f6d0(["lm_ttest_summary_zoom_plot"]):::outdated
-    x1615e86a4352b497{{"zoom_scales"}}:::outdated --> x48f0f510e049f6d0(["lm_ttest_summary_zoom_plot"]):::outdated
-    x90c50cbdfe0d5b74(["lm_anova_logbf"]):::uptodate --> x8d899f6d5b476a5c(["lm_anova_corrected_summary_plot"]):::outdated
-    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::outdated --> x8d899f6d5b476a5c(["lm_anova_corrected_summary_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> x8d899f6d5b476a5c(["lm_anova_corrected_summary_plot"]):::outdated
+    x4abc4a40bd190013["lm_bf"]:::uptodate --> x48f0f510e049f6d0(["lm_ttest_summary_zoom_plot"]):::uptodate
+    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate --> x48f0f510e049f6d0(["lm_ttest_summary_zoom_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> x48f0f510e049f6d0(["lm_ttest_summary_zoom_plot"]):::uptodate
+    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> x48f0f510e049f6d0(["lm_ttest_summary_zoom_plot"]):::uptodate
+    x1615e86a4352b497{{"zoom_scales"}}:::uptodate --> x48f0f510e049f6d0(["lm_ttest_summary_zoom_plot"]):::uptodate
+    x90c50cbdfe0d5b74(["lm_anova_logbf"]):::uptodate --> x8d899f6d5b476a5c(["lm_anova_corrected_summary_plot"]):::uptodate
+    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate --> x8d899f6d5b476a5c(["lm_anova_corrected_summary_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> x8d899f6d5b476a5c(["lm_anova_corrected_summary_plot"]):::uptodate
     x329b0a648be700a4["anova_bf"]:::uptodate --> xee8c11d2796b1550(["ttest_anova_trend_plot"]):::uptodate
     x061b7c77ec2aea53>"logbf_trend_plot"]:::uptodate --> xee8c11d2796b1550(["ttest_anova_trend_plot"]):::uptodate
     xeaf79493baa34293(["n_s"]):::uptodate --> xee8c11d2796b1550(["ttest_anova_trend_plot"]):::uptodate
@@ -139,18 +138,18 @@ graph LR
     xcfeaac96e46ae15c(["nu"]):::uptodate --> x4abc4a40bd190013["lm_bf"]:::uptodate
     xba2e1f1771eddea4(["sigma_epsilon"]):::uptodate --> x4abc4a40bd190013["lm_bf"]:::uptodate
     x04e94ee208381956(["index"]):::uptodate --> x4abc4a40bd190013["lm_bf"]:::uptodate
-    x329b0a648be700a4["anova_bf"]:::uptodate --> xd25aaa181d8c75c7(["ttest_anova_large_n_plot"]):::outdated
-    xe86e0eb83252331d>"logbf_plot"]:::outdated --> xd25aaa181d8c75c7(["ttest_anova_large_n_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> xd25aaa181d8c75c7(["ttest_anova_large_n_plot"]):::outdated
-    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> xd25aaa181d8c75c7(["ttest_anova_large_n_plot"]):::outdated
-    x329b0a648be700a4["anova_bf"]:::uptodate --> x42a633d7a3b0e034(["lm_anova_plot"]):::outdated
-    x4abc4a40bd190013["lm_bf"]:::uptodate --> x42a633d7a3b0e034(["lm_anova_plot"]):::outdated
-    xe86e0eb83252331d>"logbf_plot"]:::outdated --> x42a633d7a3b0e034(["lm_anova_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> x42a633d7a3b0e034(["lm_anova_plot"]):::outdated
-    x329b0a648be700a4["anova_bf"]:::uptodate --> xbdb1bb9d427ff5ca(["lm_anova_summary_plot"]):::outdated
-    x4abc4a40bd190013["lm_bf"]:::uptodate --> xbdb1bb9d427ff5ca(["lm_anova_summary_plot"]):::outdated
-    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::outdated --> xbdb1bb9d427ff5ca(["lm_anova_summary_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> xbdb1bb9d427ff5ca(["lm_anova_summary_plot"]):::outdated
+    x329b0a648be700a4["anova_bf"]:::uptodate --> xd25aaa181d8c75c7(["ttest_anova_large_n_plot"]):::uptodate
+    xe86e0eb83252331d>"logbf_plot"]:::uptodate --> xd25aaa181d8c75c7(["ttest_anova_large_n_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> xd25aaa181d8c75c7(["ttest_anova_large_n_plot"]):::uptodate
+    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> xd25aaa181d8c75c7(["ttest_anova_large_n_plot"]):::uptodate
+    x329b0a648be700a4["anova_bf"]:::uptodate --> x42a633d7a3b0e034(["lm_anova_plot"]):::uptodate
+    x4abc4a40bd190013["lm_bf"]:::uptodate --> x42a633d7a3b0e034(["lm_anova_plot"]):::uptodate
+    xe86e0eb83252331d>"logbf_plot"]:::uptodate --> x42a633d7a3b0e034(["lm_anova_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> x42a633d7a3b0e034(["lm_anova_plot"]):::uptodate
+    x329b0a648be700a4["anova_bf"]:::uptodate --> xbdb1bb9d427ff5ca(["lm_anova_summary_plot"]):::uptodate
+    x4abc4a40bd190013["lm_bf"]:::uptodate --> xbdb1bb9d427ff5ca(["lm_anova_summary_plot"]):::uptodate
+    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate --> xbdb1bb9d427ff5ca(["lm_anova_summary_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> xbdb1bb9d427ff5ca(["lm_anova_summary_plot"]):::uptodate
     x8ecaf1a2a7523541(["mu"]):::uptodate --> x3eacaf6486c5145a["data_i"]:::uptodate
     xeaf79493baa34293(["n_s"]):::uptodate --> x3eacaf6486c5145a["data_i"]:::uptodate
     x4ee98ffbc71ab023(["n_t"]):::uptodate --> x3eacaf6486c5145a["data_i"]:::uptodate
@@ -163,27 +162,27 @@ graph LR
     x329b0a648be700a4["anova_bf"]:::uptodate --> x90c50cbdfe0d5b74(["lm_anova_logbf"]):::uptodate
     x6dc4618e710ead06>"correct_bf"]:::uptodate --> x90c50cbdfe0d5b74(["lm_anova_logbf"]):::uptodate
     x4abc4a40bd190013["lm_bf"]:::uptodate --> x90c50cbdfe0d5b74(["lm_anova_logbf"]):::uptodate
-    x4abc4a40bd190013["lm_bf"]:::uptodate --> x4ad37dca8e198589(["lm_ttest_summary_plot"]):::outdated
-    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::outdated --> x4ad37dca8e198589(["lm_ttest_summary_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> x4ad37dca8e198589(["lm_ttest_summary_plot"]):::outdated
-    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> x4ad37dca8e198589(["lm_ttest_summary_plot"]):::outdated
-    x4abc4a40bd190013["lm_bf"]:::uptodate --> xd48b8f6329d5f74b(["lm_ttest_large_n_plot"]):::outdated
-    xe86e0eb83252331d>"logbf_plot"]:::outdated --> xd48b8f6329d5f74b(["lm_ttest_large_n_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> xd48b8f6329d5f74b(["lm_ttest_large_n_plot"]):::outdated
-    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> xd48b8f6329d5f74b(["lm_ttest_large_n_plot"]):::outdated
-    x329b0a648be700a4["anova_bf"]:::uptodate --> x5d09d4146c534948(["lm_anova_large_n_plot"]):::outdated
-    x4abc4a40bd190013["lm_bf"]:::uptodate --> x5d09d4146c534948(["lm_anova_large_n_plot"]):::outdated
-    xe86e0eb83252331d>"logbf_plot"]:::outdated --> x5d09d4146c534948(["lm_anova_large_n_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> x5d09d4146c534948(["lm_anova_large_n_plot"]):::outdated
-    x329b0a648be700a4["anova_bf"]:::uptodate --> xf3f0d890f356316a(["lm_anova_summary_zoom_plot"]):::outdated
-    x4abc4a40bd190013["lm_bf"]:::uptodate --> xf3f0d890f356316a(["lm_anova_summary_zoom_plot"]):::outdated
-    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::outdated --> xf3f0d890f356316a(["lm_anova_summary_zoom_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> xf3f0d890f356316a(["lm_anova_summary_zoom_plot"]):::outdated
-    x1615e86a4352b497{{"zoom_scales"}}:::outdated --> xf3f0d890f356316a(["lm_anova_summary_zoom_plot"]):::outdated
-    xa00237f46a787f98(["lm_ttest_logbf"]):::uptodate --> xfea49e8d3c6cf504(["lm_ttest_corrected_summary_zoom_plot"]):::outdated
-    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::outdated --> xfea49e8d3c6cf504(["lm_ttest_corrected_summary_zoom_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> xfea49e8d3c6cf504(["lm_ttest_corrected_summary_zoom_plot"]):::outdated
-    x1615e86a4352b497{{"zoom_scales"}}:::outdated --> xfea49e8d3c6cf504(["lm_ttest_corrected_summary_zoom_plot"]):::outdated
+    x4abc4a40bd190013["lm_bf"]:::uptodate --> x4ad37dca8e198589(["lm_ttest_summary_plot"]):::uptodate
+    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate --> x4ad37dca8e198589(["lm_ttest_summary_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> x4ad37dca8e198589(["lm_ttest_summary_plot"]):::uptodate
+    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> x4ad37dca8e198589(["lm_ttest_summary_plot"]):::uptodate
+    x4abc4a40bd190013["lm_bf"]:::uptodate --> xd48b8f6329d5f74b(["lm_ttest_large_n_plot"]):::uptodate
+    xe86e0eb83252331d>"logbf_plot"]:::uptodate --> xd48b8f6329d5f74b(["lm_ttest_large_n_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> xd48b8f6329d5f74b(["lm_ttest_large_n_plot"]):::uptodate
+    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> xd48b8f6329d5f74b(["lm_ttest_large_n_plot"]):::uptodate
+    x329b0a648be700a4["anova_bf"]:::uptodate --> x5d09d4146c534948(["lm_anova_large_n_plot"]):::uptodate
+    x4abc4a40bd190013["lm_bf"]:::uptodate --> x5d09d4146c534948(["lm_anova_large_n_plot"]):::uptodate
+    xe86e0eb83252331d>"logbf_plot"]:::uptodate --> x5d09d4146c534948(["lm_anova_large_n_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> x5d09d4146c534948(["lm_anova_large_n_plot"]):::uptodate
+    x329b0a648be700a4["anova_bf"]:::uptodate --> xf3f0d890f356316a(["lm_anova_summary_zoom_plot"]):::uptodate
+    x4abc4a40bd190013["lm_bf"]:::uptodate --> xf3f0d890f356316a(["lm_anova_summary_zoom_plot"]):::uptodate
+    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate --> xf3f0d890f356316a(["lm_anova_summary_zoom_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> xf3f0d890f356316a(["lm_anova_summary_zoom_plot"]):::uptodate
+    x1615e86a4352b497{{"zoom_scales"}}:::uptodate --> xf3f0d890f356316a(["lm_anova_summary_zoom_plot"]):::uptodate
+    xa00237f46a787f98(["lm_ttest_logbf"]):::uptodate --> xfea49e8d3c6cf504(["lm_ttest_corrected_summary_zoom_plot"]):::uptodate
+    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate --> xfea49e8d3c6cf504(["lm_ttest_corrected_summary_zoom_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> xfea49e8d3c6cf504(["lm_ttest_corrected_summary_zoom_plot"]):::uptodate
+    x1615e86a4352b497{{"zoom_scales"}}:::uptodate --> xfea49e8d3c6cf504(["lm_ttest_corrected_summary_zoom_plot"]):::uptodate
     xa821325e87eea2da["agg_diff_data_i"]:::uptodate --> x4df3f0b4865e9d1f["ttest_bf"]:::uptodate
     xeaf79493baa34293(["n_s"]):::uptodate --> x4df3f0b4865e9d1f["ttest_bf"]:::uptodate
     x4ee98ffbc71ab023(["n_t"]):::uptodate --> x4df3f0b4865e9d1f["ttest_bf"]:::uptodate
@@ -191,27 +190,27 @@ graph LR
     xba2e1f1771eddea4(["sigma_epsilon"]):::uptodate --> x4df3f0b4865e9d1f["ttest_bf"]:::uptodate
     x738f2179468d4542(["sigma_theta"]):::uptodate --> x4df3f0b4865e9d1f["ttest_bf"]:::uptodate
     x04e94ee208381956(["index"]):::uptodate --> x4df3f0b4865e9d1f["ttest_bf"]:::uptodate
-    x329b0a648be700a4["anova_bf"]:::uptodate --> xebd5d8d40a900838(["ttest_anova_summary_zoom_plot"]):::outdated
-    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::outdated --> xebd5d8d40a900838(["ttest_anova_summary_zoom_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> xebd5d8d40a900838(["ttest_anova_summary_zoom_plot"]):::outdated
-    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> xebd5d8d40a900838(["ttest_anova_summary_zoom_plot"]):::outdated
-    x1615e86a4352b497{{"zoom_scales"}}:::outdated --> xebd5d8d40a900838(["ttest_anova_summary_zoom_plot"]):::outdated
+    x329b0a648be700a4["anova_bf"]:::uptodate --> xebd5d8d40a900838(["ttest_anova_summary_zoom_plot"]):::uptodate
+    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate --> xebd5d8d40a900838(["ttest_anova_summary_zoom_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> xebd5d8d40a900838(["ttest_anova_summary_zoom_plot"]):::uptodate
+    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> xebd5d8d40a900838(["ttest_anova_summary_zoom_plot"]):::uptodate
+    x1615e86a4352b497{{"zoom_scales"}}:::uptodate --> xebd5d8d40a900838(["ttest_anova_summary_zoom_plot"]):::uptodate
     x329b0a648be700a4["anova_bf"]:::uptodate --> x1eebc08898fd99b5(["lm_anova_trend_plot"]):::uptodate
     x4abc4a40bd190013["lm_bf"]:::uptodate --> x1eebc08898fd99b5(["lm_anova_trend_plot"]):::uptodate
     x061b7c77ec2aea53>"logbf_trend_plot"]:::uptodate --> x1eebc08898fd99b5(["lm_anova_trend_plot"]):::uptodate
     xeaf79493baa34293(["n_s"]):::uptodate --> x1eebc08898fd99b5(["lm_anova_trend_plot"]):::uptodate
-    x329b0a648be700a4["anova_bf"]:::uptodate --> xe04d9407c0f16f0c(["ttest_anova_summary_plot"]):::outdated
-    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::outdated --> xe04d9407c0f16f0c(["ttest_anova_summary_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> xe04d9407c0f16f0c(["ttest_anova_summary_plot"]):::outdated
-    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> xe04d9407c0f16f0c(["ttest_anova_summary_plot"]):::outdated
-    x4abc4a40bd190013["lm_bf"]:::uptodate --> xbd6d9ed6586d7827(["lm_ttest_plot"]):::outdated
-    xe86e0eb83252331d>"logbf_plot"]:::outdated --> xbd6d9ed6586d7827(["lm_ttest_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> xbd6d9ed6586d7827(["lm_ttest_plot"]):::outdated
-    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> xbd6d9ed6586d7827(["lm_ttest_plot"]):::outdated
-    x90c50cbdfe0d5b74(["lm_anova_logbf"]):::uptodate --> x35140ed3954b9c98(["lm_anova_corrected_summary_zoom_plot"]):::outdated
-    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::outdated --> x35140ed3954b9c98(["lm_anova_corrected_summary_zoom_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> x35140ed3954b9c98(["lm_anova_corrected_summary_zoom_plot"]):::outdated
-    x1615e86a4352b497{{"zoom_scales"}}:::outdated --> x35140ed3954b9c98(["lm_anova_corrected_summary_zoom_plot"]):::outdated
+    x329b0a648be700a4["anova_bf"]:::uptodate --> xe04d9407c0f16f0c(["ttest_anova_summary_plot"]):::uptodate
+    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate --> xe04d9407c0f16f0c(["ttest_anova_summary_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> xe04d9407c0f16f0c(["ttest_anova_summary_plot"]):::uptodate
+    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> xe04d9407c0f16f0c(["ttest_anova_summary_plot"]):::uptodate
+    x4abc4a40bd190013["lm_bf"]:::uptodate --> xbd6d9ed6586d7827(["lm_ttest_plot"]):::uptodate
+    xe86e0eb83252331d>"logbf_plot"]:::uptodate --> xbd6d9ed6586d7827(["lm_ttest_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> xbd6d9ed6586d7827(["lm_ttest_plot"]):::uptodate
+    x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> xbd6d9ed6586d7827(["lm_ttest_plot"]):::uptodate
+    x90c50cbdfe0d5b74(["lm_anova_logbf"]):::uptodate --> x35140ed3954b9c98(["lm_anova_corrected_summary_zoom_plot"]):::uptodate
+    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate --> x35140ed3954b9c98(["lm_anova_corrected_summary_zoom_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> x35140ed3954b9c98(["lm_anova_corrected_summary_zoom_plot"]):::uptodate
+    x1615e86a4352b497{{"zoom_scales"}}:::uptodate --> x35140ed3954b9c98(["lm_anova_corrected_summary_zoom_plot"]):::uptodate
     x4132bef5cada5de0["agg_data_i"]:::uptodate --> xa821325e87eea2da["agg_diff_data_i"]:::uptodate
     x4132bef5cada5de0["agg_data_i"]:::uptodate --> x329b0a648be700a4["anova_bf"]:::uptodate
     xeaf79493baa34293(["n_s"]):::uptodate --> x329b0a648be700a4["anova_bf"]:::uptodate
@@ -220,21 +219,19 @@ graph LR
     xba2e1f1771eddea4(["sigma_epsilon"]):::uptodate --> x329b0a648be700a4["anova_bf"]:::uptodate
     x738f2179468d4542(["sigma_theta"]):::uptodate --> x329b0a648be700a4["anova_bf"]:::uptodate
     x04e94ee208381956(["index"]):::uptodate --> x329b0a648be700a4["anova_bf"]:::uptodate
-    xa00237f46a787f98(["lm_ttest_logbf"]):::uptodate --> x926ff8e74f68255b(["lm_ttest_corrected_summary_plot"]):::outdated
-    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::outdated --> x926ff8e74f68255b(["lm_ttest_corrected_summary_plot"]):::outdated
-    xeaf79493baa34293(["n_s"]):::uptodate --> x926ff8e74f68255b(["lm_ttest_corrected_summary_plot"]):::outdated
+    xa00237f46a787f98(["lm_ttest_logbf"]):::uptodate --> x926ff8e74f68255b(["lm_ttest_corrected_summary_plot"]):::uptodate
+    xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate --> x926ff8e74f68255b(["lm_ttest_corrected_summary_plot"]):::uptodate
+    xeaf79493baa34293(["n_s"]):::uptodate --> x926ff8e74f68255b(["lm_ttest_corrected_summary_plot"]):::uptodate
     x3eacaf6486c5145a["data_i"]:::uptodate --> x4132bef5cada5de0["agg_data_i"]:::uptodate
     xd51e323eb90213dd{{"project_packages"}}:::uptodate --> xd51e323eb90213dd{{"project_packages"}}:::uptodate
   end
   classDef uptodate stroke:#000000,color:#ffffff,fill:#354823;
-  classDef outdated stroke:#000000,color:#000000,fill:#78B7C5;
   classDef none stroke:#000000,color:#000000,fill:#94a4ac;
   linkStyle 0 stroke-width:0px;
   linkStyle 1 stroke-width:0px;
   linkStyle 2 stroke-width:0px;
   linkStyle 3 stroke-width:0px;
-  linkStyle 4 stroke-width:0px;
-  linkStyle 125 stroke-width:0px;
+  linkStyle 124 stroke-width:0px;
 ```
 
 ### Report
@@ -249,11 +246,11 @@ graph LR
   end
   subgraph Graph
     x6e52cb0f1668cc22(["readme"]):::started --> x5a4cc06fc4a3b7ee(["readme_rmd"]):::outdated
-    x318ca994c4bb593a(["report_md"]):::uptodate --> xe6fb6b2c93ead02c(["spellcheck_report"]):::uptodate
-    x4ffa27198e787466(["spellcheck_exceptions"]):::uptodate --> xe6fb6b2c93ead02c(["spellcheck_report"]):::uptodate
+    x318ca994c4bb593a(["report_md"]):::outdated --> xe6fb6b2c93ead02c(["spellcheck_report"]):::outdated
+    x4ffa27198e787466(["spellcheck_exceptions"]):::uptodate --> xe6fb6b2c93ead02c(["spellcheck_report"]):::outdated
     x5a4cc06fc4a3b7ee(["readme_rmd"]):::outdated --> xf1a660a3e2076bea(["spellcheck_readme"]):::outdated
     x4ffa27198e787466(["spellcheck_exceptions"]):::uptodate --> xf1a660a3e2076bea(["spellcheck_readme"]):::outdated
-    xe0fba61fbc506510(["report"]):::uptodate --> x318ca994c4bb593a(["report_md"]):::uptodate
+    xe0fba61fbc506510(["report"]):::outdated --> x318ca994c4bb593a(["report_md"]):::outdated
   end
   classDef started stroke:#000000,color:#000000,fill:#DC863B;
   classDef outdated stroke:#000000,color:#000000,fill:#78B7C5;
