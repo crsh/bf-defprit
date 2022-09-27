@@ -38,18 +38,6 @@ list(
     , format = "file"
   )
 
-  # Render README
-  , tar_render(
-    readme
-    , "README.Rmd"
-    , cue = tar_cue(mode = "always")
-  )
-  , tar_target(
-    readme_rmd
-    , readme[grepl("Rmd", readme)]
-    , format = "file"
-  )
-
   # Spell checks
   , tar_target(
     spellcheck_exceptions
@@ -69,8 +57,22 @@ list(
       report_md
       , ignore = spellcheck_exceptions
     ))
-  ),
-  tar_target(
+  )
+
+  # Render README
+  , tar_render(
+    readme
+    , "README.Rmd"
+    , cue = tar_cue(mode = "always")
+  )
+  , tar_target(
+    readme_rmd
+    , readme[grepl("Rmd", readme)]
+    , format = "file"
+  )
+
+  # Spell checks
+  , tar_target(
     spellcheck_readme
     , invisible(spelling::spell_check_files(
       readme_rmd

@@ -38,7 +38,7 @@ This project contains three separate but interdependent pipelines
 ### Partial aggregation simulation
 
 ```{r echo = FALSE, results = "asis"}
-cat("```mermaid")
+cat("```mermaid\n")
 targets::tar_mermaid(
   script = "_targets_partial_aggregation.R"
   , store = "_targets_partial_aggregation"
@@ -51,7 +51,7 @@ cat("\n```")
 ### Full aggregation simulation
 
 ```{r echo = FALSE, results = "asis"}
-cat("```mermaid")
+cat("```mermaid\n")
 targets::tar_mermaid(
   script = "_targets_full_aggregation.R"
   , store = "_targets_full_aggregation"
@@ -64,7 +64,7 @@ cat("\n```")
 ### Report
 
 ```{r echo = FALSE, results = "asis"}
-cat("```mermaid")
+cat("```mermaid\n")
 targets::tar_mermaid(
   script = "_targets_report.R"
   , store = "_targets_report"
