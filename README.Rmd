@@ -16,6 +16,8 @@ We provide a Dockerfile, R scripts, and a Quarto document to reproduce the repor
 The Quarto document in the `reports` directory and the `_targets_*.R` scripts contain details about reported simulations and can be used to reproduce the results.
 With the help of [Quarto](https://quarto.org/) the `.qmd`-file can be rendered into a report of the simulation results in HTML format.
 
+View the report of the simulation results [here](https://htmlpreview.github.io/?https://github.com/crsh/bf-defprit/blob/main/report/prior_translation.html).
+
 
 ## Recommended citation
 

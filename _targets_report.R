@@ -31,11 +31,13 @@ list(
       , "_targets_partial_aggregation/meta/progress"
       , "report/references.bib"
     )
+    , priority = 1
   )
   , tar_target(
     report_md
     , gsub("qmd", "md", report[grepl("qmd", report)])
     , format = "file"
+    , priority = 1
   )
 
   # Spell checks
@@ -57,6 +59,7 @@ list(
       report_md
       , ignore = spellcheck_exceptions
     ))
+    , priority = 1
   )
 
   # Render README
