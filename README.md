@@ -249,8 +249,8 @@ graph LR
   end
   subgraph Graph
     x6e52cb0f1668cc22(["readme"]):::started --> x5a4cc06fc4a3b7ee(["readme_rmd"]):::outdated
-    x318ca994c4bb593a(["report_md"]):::uptodate --> xe6fb6b2c93ead02c(["spellcheck_report"]):::uptodate
-    x4ffa27198e787466(["spellcheck_exceptions"]):::uptodate --> xe6fb6b2c93ead02c(["spellcheck_report"]):::uptodate
+    x318ca994c4bb593a(["report_md"]):::uptodate --> xe6fb6b2c93ead02c(["spellcheck_report"]):::outdated
+    x4ffa27198e787466(["spellcheck_exceptions"]):::uptodate --> xe6fb6b2c93ead02c(["spellcheck_report"]):::outdated
     x5a4cc06fc4a3b7ee(["readme_rmd"]):::outdated --> xf1a660a3e2076bea(["spellcheck_readme"]):::outdated
     x4ffa27198e787466(["spellcheck_exceptions"]):::uptodate --> xf1a660a3e2076bea(["spellcheck_readme"]):::outdated
     xe0fba61fbc506510(["report"]):::uptodate --> x318ca994c4bb593a(["report_md"]):::uptodate

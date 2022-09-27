@@ -174,6 +174,7 @@ $$
 \bar{y}_{ij\cdot} - \bar{y}_{ij\cdot} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha_i + 0.5 \nu), \sigma\prime_\epsilon^2) \\
 & - \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha_i - 0.5 \nu), \sigma\prime_\epsilon^2) \\
   & = \mathcal{N}(\sigma\prime_\epsilon \nu, 2\sigma\prime_\epsilon^2) \\ & \\
+  \nu & \sim \mathcal{N}(0, g_\nu \sqrt{\sigma_\theta^2/4})
 \end{aligned}
 $$
 
