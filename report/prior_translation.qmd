@@ -1063,6 +1063,31 @@ attr(
 
 :::
 
+For easier comparison, the following plot shows a direct comparison of the approximate prior adjustment and the additionally correction for error variance and sample size for the paired $t$-test.
+
+```{r adjustment-correction-comparison}
+#| fig.width: 7
+#| fig.height: 7
+p1 <- tar_read("lm_ttest_summary_plot")
+
+p2 <- tar_read("lm_ttest_corrected_summary_plot")
+
+p3 <- tar_read("lm_ttest_summary_zoom_plot")
+
+p4 <- tar_read("lm_ttest_corrected_summary_zoom_plot")
+
+layout <- "
+AB
+CD
+"
+
+(p1 + labs(tag = NULL) + ggtitle("Approximately adjusted prior")) + (p2 + labs(tag = NULL) + ggtitle(bquote("Additionally corrected for"~sigma[epsilon]~"and"~italic(I)))) +
+  (p3 + theme(axis.text.x = element_text(angle = 45))) + (p4 + theme(axis.text.x = element_text(angle = 45))) + 
+  plot_layout(design = layout, guides = "collect")
+```
+
+
+
 ```{r exit}
 Sys.setenv(TAR_PROJECT = "report")
 ```

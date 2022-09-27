@@ -478,6 +478,14 @@ $\log \mathrm{BF}$ $\times$ $\sigma_\epsilon^2$ $\times$ $\log I$     0.049    [
 
 :::
 
+For easier comparison, the following plot shows a direct comparison of the approximate prior adjustment and the additionally correction for error variance and sample size for the paired $t$-test.
+
+
+::: {.cell}
+::: {.cell-output-display}
+![](prior_translation_files/figure-html/adjustment-correction-comparison-1.png){width=672}
+:::
+:::
 
 ::: {.cell}
 
