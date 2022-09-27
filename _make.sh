@@ -2,7 +2,7 @@
 
 # Select subproject -------------------------------------------------------
 
-project <- NULL # "partial_aggregation", "full_aggregation", "report"
+project <- "report" # "partial_aggregation", "full_aggregation", "report"
 
 # Subset targets ----------------------------------------------------------
 
@@ -24,6 +24,14 @@ if(!is.null(project)) {
   }
 }
 
+cat("Report spell check:\n\n")
+
 spelling:::print.summary_spellcheck(
   targets::tar_read(spellcheck_report, store = "_targets_report")
+)
+
+cat("\n\nREADME spell check:\n\n")
+
+spelling:::print.summary_spellcheck(
+  targets::tar_read(spellcheck_readme, store = "_targets_report")
 )

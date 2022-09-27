@@ -23,7 +23,8 @@ knitr:
 format:
   html:
     code-fold: true
-    self-contained: true
+    standalone: true
+    embed-resources: true
     link-external-icon: true
     citations-hover: true
     footnotes-hover: true

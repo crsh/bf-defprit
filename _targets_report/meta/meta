@@ -1,6 +1,10 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|75b894a32d8ebd65|||||||||||||||
-report|stem|e36337f48068b4ae|94bafd908983b80f|72762497b7f1f5b8|-237041703|report/prior_translation.html*report/prior_translation.pdf*report/prior_translation.qmd*_targets_full_aggregation/meta/progress*_targets_partial_aggregation/meta/progress*report/references.bib|t19261.9372643677s||7522578|file|local|vector|||136.999||System command quarto failed
-report_md|stem|da7e5646cbdfced7|596243de06efd9e6|1ec22aff42d78a6d|-80060071||t0s|f4066a65ff755f48|0|file|local|vector|||0||
-spellcheck_exceptions|stem|fa571cc6e40c5ddd|7263c16f69698457|a3dad144c40657ed|1200658335||t19261.9142229252s|11684eb95dbf8c0d|189|rds|local|vector|||0.001||
-spellcheck_report|stem|e9e7b2dbbfb469d6|5c773c5dadc67723|28ecb6a65474d6b9|-33163502||t19262.0171956755s|6aac70ce59868a33|131|rds|local|vector|||0.056||
+.Random.seed|object|8a588809163c21bc|||||||||||||||
+readme|stem|9541bc0b8ee6a2bb|2419a0f44a0792be|4745aa592080ea1d|-165896733|README.md*README.Rmd|t19262.4175936933s|769491939fff23c5|27109|file|local|vector|||37.668||
+readme_md|stem|102a163f9aab2c9c|4adf7e7da8406f13|5189aa4955a0b414|-1156024186|README.md|t19262.415322943s|3b21a9336011b46c|25032|file|local|vector|||0||
+readme_rmd|stem|b2fdb1175571a8de|1af4426d2ea14fae|b12977f531e61040|-1948844798|README.Rmd|t19262.3957939892s|bfcad1d6622e239c|2311|file|local|vector|||0||
+report|stem|4a4195e89b7a0369|94bafd908983b80f|72762497b7f1f5b8|-237041703|report/prior_translation.html*report/prior_translation.pdf*report/prior_translation.qmd*_targets_full_aggregation/meta/progress*_targets_partial_aggregation/meta/progress*report/references.bib|t19262.4135555195s|a9a2ec3f19f74e82|1600024|file|local|vector|||65.023||
+report_md|stem|9e48976063e430c7|596243de06efd9e6|9ae96e098c57946b|-80060071|report/prior_translation.md|t19262.4134800171s|b333473cd37ca4f3|15078|file|local|vector|||0||
+spellcheck_exceptions|stem|3c897bc2ca54c04f|24bfdf989795fe32|a3dad144c40657ed|1200658335||t19262.4176001608s|edce0efd19a3c370|219|rds|local|vector|||0.001||
+spellcheck_readme|stem|2075511d57e6730f|5a4b551e7ffe2eca|2e57dc21adeadc97|-915544304||t19262.4176033192s|83dfaca672102c9e|139|rds|local|vector|||0.01||
+spellcheck_report|stem|2075511d57e6730f|5c773c5dadc67723|c30af489e22a2429|-33163502||t19262.4176023028s|83dfaca672102c9e|139|rds|local|vector|||0.113||

@@ -23,7 +23,8 @@ knitr:
 format:
   html:
     code-fold: true
-    self-contained: true
+    standalone: true
+    embed-resources: true
     link-external-icon: true
     citations-hover: true
     footnotes-hover: true
@@ -41,6 +42,9 @@ In @vandoorn2021, we give Example 1 in which Bayes factors in mixed models with 
 We assumed a simple repeated-measures design with $I$ participants responding $K$ times in each of two conditions.
 The maximal model for these data is our Model 6 with random intercepts $\alpha_i$ and random slopes $\theta_i$,
 
+
+
+
 $$
 \begin{aligned}
 y_{ijk} & \sim \mathcal{N}(\mu + \sigma_\epsilon (\alpha_i + x_j (\nu + \theta_i)), \sigma^2_\epsilon) \\ & \\
@@ -54,10 +58,16 @@ g_{\theta} & \sim \mathcal{IG}(0.5, 0.5~r_{\theta}^2) \\ & \\
 \end{aligned}
 $$
 
+
+
+
 # Reduced error variance through aggregation
 
 Because priors are placed on standardized effect sizes, a reduction of $\sigma_\epsilon$ increases prior plausibility of larger effect sizes.
 In our Example 1, measurement error decreases as the number of aggregated trials $n$ increases, $\sigma\prime_\epsilon = \frac{\sigma_\epsilon}{\sqrt{n}}$,
+
+
+
 
 $$
 \begin{aligned}
@@ -68,7 +78,13 @@ y_{ijk} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha_i + x_j (\nu + \t
 \end{aligned}
 $$
 
+
+
+
 This further implies the priors
+
+
+
 
 $$
 \begin{aligned}
@@ -77,6 +93,9 @@ g_\alpha & \sim \mathcal{IG}(0.5, 0.5~r^2_{\alpha}/\sqrt{n}) \\
 g_\theta & \sim\mathcal{IG}(0.5, 0.5~r^2_{\theta}/\sqrt{n}).
 \end{aligned}
 $$
+
+
+
 
 Hence, to obtain equivalent Bayes factors the prior scales should be adjusted accordingly, $r\prime^2 = r^2 \sqrt{n}$.
 
@@ -98,7 +117,7 @@ As in our Example 1, the data were generated deterministically with identical co
 
 ::: {.cell}
 ::: {.cell-output-display}
-![](prior_translation_files/figure-pdf/unnamed-chunk-3-1.pdf)
+![](prior_translation_files/figure-pdf/unnamed-chunk-6-1.pdf)
 :::
 :::
 
@@ -117,6 +136,9 @@ When aggregating each participant's data to a single observation per cell the da
 When data are fully aggregated data (i.e., $n = K$), the random slopes variance $\sigma_\theta^2$ folds into the error variance $\sigma_\epsilon^2$.
 That is, Model 6 reduces to Model 4,
 
+
+
+
 $$
 \begin{aligned}
 \bar{y}_{ij\cdot} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha_i + x_j \nu), \sigma\prime_\epsilon^2 + \sigma_\theta^2/2) \\
@@ -125,8 +147,14 @@ $$
 \end{aligned}
 $$
 
+
+
+
 The random slopes variance $\sigma_\theta^2$ is scaled by the orthonormal effect coding, $\pm \sqrt{2}/2$.
 Compared to partial aggregation, the adjustment for the fixed effect requires an additional factor that depends on a weighted ratio of random variance $\sigma^2_\theta$ and error variance $\sigma^2_\epsilon$,
+
+
+
 
 $$
 \begin{aligned}
@@ -135,6 +163,9 @@ $$
   & = \sigma_\epsilon/\sqrt{K} \sqrt{\frac{2/K + \sigma^2_\theta/\sigma_\epsilon^2}{2/K}} \\
 \end{aligned}
 $$
+
+
+
 
 <!-- Again, to obtain equivalent Bayes factors the prior scales for fixed and random effects need to be adjusted accordingly, -->
 
@@ -150,6 +181,9 @@ For random intercepts, the additional correction factor is obtained by marginali
 
 For the paired $t$-test the prior adjustment additionally must account for the different model parameterization ($\pm 0.5$ vs. $\pm \sqrt{2}/2$),
 
+
+
+
 $$
 \begin{aligned}
 \bar{y}_{ij\cdot} - \bar{y}_{ij\cdot} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha_i + 0.5 \nu), \sigma\prime_\epsilon^2) \\
@@ -158,7 +192,13 @@ $$
 \end{aligned}
 $$
 
+
+
+
 Rescaling the prior on $\nu$ to the orthonormal scale, $\sqrt{2}\nu$, yields the same adjustment as for the ANOVA prior,
+
+
+
 
 $$
 \begin{aligned}
@@ -167,6 +207,9 @@ $$
   & = \sigma_\epsilon/\sqrt{K} \sqrt{\frac{2/K + \sigma^2_\theta/\sigma_\epsilon^2}{2/K}}. \\
 \end{aligned}
 $$
+
+
+
 
 Note that in the linear mixed model $\sigma_\theta^2$ is characterized by a probability distribution, which prohibits a translation of the prior in terms of an adjusted scaling factor.
 To test whether the adjustment can be approximated by using a point estimate, we conducted a simulation for balanced null comparisons.
@@ -389,13 +432,15 @@ The Bayes factors predicted by the selected model,
 :::
 
 
-
 $$
 \begin{aligned}
 \log\mathrm{BF_{LMM}} = & ~ b_1 \sigma_\epsilon + b_2 \sqrt{\sigma_\epsilon} + b_3 \sqrt{I} + b_4 \sqrt{I} \sigma_\epsilon +\\
     & ~\log \mathrm{BF} (1 + b_5 \sigma_\epsilon^2 + b_6 \log I + b_7 \sigma_\epsilon^2 \log I),
 \end{aligned}
 $$
+
+
+
 
 largely offset divergences between linear mixed model and aggregate analyses.
 

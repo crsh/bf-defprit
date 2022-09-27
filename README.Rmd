@@ -33,13 +33,16 @@ The environment can be interacted with in an RStudio instance in a web browser t
 
 The simulations were run using reproducible pipelines defined with the `targets` package.
 To run the pipeline execute `_make.sh`, e.g. `sh _make.sh` in the terminal.
-This project contains three seperate but interdependent pipelines
+This project contains three separate but interdependent pipelines
 
 ### Partial aggregation simulation
 
 ```{r echo = FALSE, results = "asis"}
 cat("```mermaid")
-targets::tar_mermaid(store = "_targets_partial_aggregation") |> 
+targets::tar_mermaid(
+  script = "_targets_partial_aggregation.R"
+  , store = "_targets_partial_aggregation"
+  ) |> 
   cat(sep = "\n")
 cat("\n```")
 ```
@@ -48,7 +51,10 @@ cat("\n```")
 
 ```{r echo = FALSE, results = "asis"}
 cat("```mermaid")
-targets::tar_mermaid(store = "_targets_full_aggregation") |> 
+targets::tar_mermaid(
+  script = "_targets_full_aggregation.R"
+  , store = "_targets_full_aggregation"
+  ) |> 
   cat(sep = "\n")
 cat("\n```")
 ```
@@ -57,7 +63,10 @@ cat("\n```")
 
 ```{r echo = FALSE, results = "asis"}
 cat("```mermaid")
-targets::tar_mermaid(store = "_targets_report") |> 
+targets::tar_mermaid(
+  script = "_targets_report.R"
+  , store = "_targets_report"
+  ) |> 
   cat(sep = "\n")
 cat("\n```")
 ```

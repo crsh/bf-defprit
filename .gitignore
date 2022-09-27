@@ -20,6 +20,9 @@
 # RStudio files
 *.Rproj
 .Rproj.user/
+.config/
+.local/
+.cache/
 
 # produced vignettes
 vignettes/*.html
@@ -39,9 +42,9 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
+# OS files
 .DS_Store
-.config/
-.local/
-.cache/
+.bash_history
 
+# Project-specific files
 report/prior_translation_files/

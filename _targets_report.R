@@ -38,23 +38,42 @@ list(
     , format = "file"
   )
 
+  # Render README
+  , tar_render(
+    readme
+    , "README.Rmd"
+    , cue = tar_cue(mode = "always")
+  )
+  , tar_target(
+    readme_rmd
+    , readme[grepl("Rmd", readme)]
+    , format = "file"
+  )
+
   # Spell checks
   , tar_target(
     spellcheck_exceptions
     , c(
-      "Frederik", "Aust"
-      , "Julia", "Haaf"
+      "Frederik", "Aust", "Julia", "Haaf", "Doorn", "et", "al"
       , "deterministically", "IG", "ij", "ijk"
       , "multifactorial", "orthonormal", "Rescaling"
       , "Singmann"
       , "cdot", "frac", "mathcal", "mathrm", "LMM"
       , "tabset"
+      , "Dockerfile", "RStudio"
     )
   ),
   tar_target(
     spellcheck_report
     , invisible(spelling::spell_check_files(
       report_md
+      , ignore = spellcheck_exceptions
+    ))
+  ),
+  tar_target(
+    spellcheck_readme
+    , invisible(spelling::spell_check_files(
+      readme_rmd
       , ignore = spellcheck_exceptions
     ))
   )
