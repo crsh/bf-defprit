@@ -35,8 +35,7 @@ but interdependent pipelines
 
 ### Partial aggregation simulation
 
-\`\`\`mermaidchecked: 108 \| outdated: 0checked: 202 \| outdated: 0  
-graph LR subgraph legend x7420bd9270f8d27d(\[““Up to
+\`\`\`mermaidgraph LR subgraph legend x7420bd9270f8d27d(\[““Up to
 date””\]):::uptodate — x70a5fa6bea6f298d\[““Pattern””\]:::none
 x70a5fa6bea6f298d\[““Pattern””\]:::none —
 xbf4603d6c2c2ad6b(\[““Stem””\]):::none
@@ -130,8 +129,7 @@ stroke-width:0px;
 
     ### Full aggregation simulation
 
-    ```mermaidchecked: 9 | outdated: 0checked: 107 | outdated: 0checked: 217 | outdated: 0checked: 324 | outdated: 0checked: 429 | outdated: 0checked: 531 | outdated: 0checked: 635 | outdated: 0checked: 742 | outdated: 0checked: 846 | outdated: 0checked: 953 | outdated: 0checked: 1058 | outdated: 0checked: 1166 | outdated: 0checked: 1272 | outdated: 0checked: 1379 | outdated: 0checked: 1486 | outdated: 0checked: 1580 | outdated: 0checked: 1684 | outdated: 0checked: 1788 | outdated: 0checked: 1810 | outdated: 0checked: 1930 | outdated: 0checked: 2046 | outdated: 0checked: 2161 | outdated: 0checked: 2276 | outdated: 0checked: 2394 | outdated: 0checked: 2508 | outdated: 0checked: 2623 | outdated: 0checked: 2742 | outdated: 0checked: 2860 | outdated: 0checked: 2976 | outdated: 0checked: 3093 | outdated: 0checked: 3208 | outdated: 0checked: 3325 | outdated: 0checked: 3441 | outdated: 0checked: 3559 | outdated: 0checked: 3611 | outdated: 0checked: 3729 | outdated: 0checked: 3845 | outdated: 0checked: 3964 | outdated: 0checked: 4080 | outdated: 0checked: 4108 | outdated: 0checked: 4225 | outdated: 0checked: 4344 | outdated: 0checked: 4463 | outdated: 0checked: 4580 | outdated: 0checked: 4700 | outdated: 0checked: 4820 | outdated: 0checked: 4934 | outdated: 0checked: 5053 | outdated: 0checked: 5174 | outdated: 0checked: 5292 | outdated: 0checked: 5411 | outdated: 0checked: 5434 | outdated: 0checked: 5537 | outdated: 0checked: 5643 | outdated: 0checked: 5749 | outdated: 0checked: 5854 | outdated: 0checked: 5960 | outdated: 0checked: 6065 | outdated: 0checked: 6171 | outdated: 0checked: 6275 | outdated: 0checked: 6381 | outdated: 0checked: 6486 | outdated: 0checked: 6581 | outdated: 0checked: 6680 | outdated: 0checked: 6784 | outdated: 0checked: 6886 | outdated: 0checked: 6986 | outdated: 0checked: 7091 | outdated: 0checked: 7197 | outdated: 0checked: 7223 | outdated: 0checked: 7334 | outdated: 0checked: 7447 | outdated: 0checked: 7559 | outdated: 0checked: 7663 | outdated: 0checked: 7775 | outdated: 0checked: 7885 | outdated: 0checked: 7999 | outdated: 0checked: 8108 | outdated: 0checked: 8215 | outdated: 0checked: 8322 | outdated: 0checked: 8434 | outdated: 0checked: 8547 | outdated: 0checked: 8660 | outdated: 0checked: 8762 | outdated: 0checked: 8875 | outdated: 0checked: 8987 | outdated: 0checked: 9020 | outdated: 4checked: 9120 | outdated: 4checked: 9222 | outdated: 4checked: 9322 | outdated: 4checked: 9420 | outdated: 4checked: 9521 | outdated: 4checked: 9622 | outdated: 4checked: 9721 | outdated: 4checked: 9823 | outdated: 4checked: 9922 | outdated: 4checked: 10018 | outdated: 4checked: 10118 | outdated: 4checked: 10220 | outdated: 4checked: 10319 | outdated: 4checked: 10419 | outdated: 4checked: 10509 | outdated: 4checked: 10606 | outdated: 4checked: 10701 | outdated: 4checked: 10797 | outdated: 4                                                                               
-    graph LR
+    ```mermaidgraph LR
       subgraph legend
         x7420bd9270f8d27d([""Up to date""]):::uptodate --- x0a52b03877696646([""Outdated""]):::outdated
         x0a52b03877696646([""Outdated""]):::outdated --- x70a5fa6bea6f298d[""Pattern""]:::none
@@ -283,10 +281,10 @@ graph LR
   end
   subgraph Graph
     x6e52cb0f1668cc22(["readme"]):::started --> x5a4cc06fc4a3b7ee(["readme_rmd"]):::outdated
-    x318ca994c4bb593a(["report_md"]):::uptodate --> xe6fb6b2c93ead02c(["spellcheck_report"]):::outdated
-    x4ffa27198e787466(["spellcheck_exceptions"]):::outdated --> xe6fb6b2c93ead02c(["spellcheck_report"]):::outdated
+    x318ca994c4bb593a(["report_md"]):::uptodate --> xe6fb6b2c93ead02c(["spellcheck_report"]):::uptodate
+    x4ffa27198e787466(["spellcheck_exceptions"]):::uptodate --> xe6fb6b2c93ead02c(["spellcheck_report"]):::uptodate
     x5a4cc06fc4a3b7ee(["readme_rmd"]):::outdated --> xf1a660a3e2076bea(["spellcheck_readme"]):::outdated
-    x4ffa27198e787466(["spellcheck_exceptions"]):::outdated --> xf1a660a3e2076bea(["spellcheck_readme"]):::outdated
+    x4ffa27198e787466(["spellcheck_exceptions"]):::uptodate --> xf1a660a3e2076bea(["spellcheck_readme"]):::outdated
     xe0fba61fbc506510(["report"]):::uptodate --> x318ca994c4bb593a(["report_md"]):::uptodate
   end
   classDef started stroke:#000000,color:#000000,fill:#DC863B;

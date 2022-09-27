@@ -42,6 +42,7 @@ cat("```mermaid")
 targets::tar_mermaid(
   script = "_targets_partial_aggregation.R"
   , store = "_targets_partial_aggregation"
+  , reporter = "silent"
   ) |> 
   cat(sep = "\n")
 cat("\n```")
@@ -54,6 +55,7 @@ cat("```mermaid")
 targets::tar_mermaid(
   script = "_targets_full_aggregation.R"
   , store = "_targets_full_aggregation"
+  , reporter = "silent"
   ) |> 
   cat(sep = "\n")
 cat("\n```")
