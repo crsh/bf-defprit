@@ -49,7 +49,7 @@ authornote: |
   All code and intermediate results are available at \url{https://github.com/crsh/bf-defprit/}.
   
 keywords          : ["Bayes factor", "Mixed model", "Hierachical model", "t-test", "ANOVA", "Default prior"]
-wordcount         : "1231"
+wordcount         : "1259"
 
 bibliography      : ["references.bib"]
 
@@ -141,7 +141,7 @@ tar_load("sigma_theta")
 tar_load("sigma_epsilon")
 ```
 
-We simulated $K = `r n_t`$ trials for $I = `r n_s`$ participants ($\mu = `r mu`$; $\sigma_\alpha = `r sigma_alpha`$; $\nu = \{`r nu`\}$; $\sigma_\theta = \{`r sigma_theta`\}$; $\sigma_\epsilon = `r sigma_epsilon`$).
+We simulated $K = `r n_t`$ trials for $I = `r n_s`$ participants ($\mu = `r mu`$; $\sigma_\alpha = `r sigma_alpha`$; $\nu = \{`r paste(nu, collapse = ", ")`\}$; $\sigma_\theta = \{`r paste(sigma_theta, collapse = ", ")`\}$; $\sigma_\epsilon = `r sigma_epsilon`$).
 For each combination of simulation parameters, we created six datasets of varying levels of aggregation, $n = \{1, 2, 5, 10, 25, 50\}$, where $n = 1$ indicates no aggregation and $n = 50$ indicates that of the initial 100 trials two means remain per cell.
 Like @vandoorn2021, we generated the data deterministically such that condition and participant means as well as standard errors were identical across all levels of aggregation.
 Bayes factors quantify evidence for the maximal model against a model that omits the fixed effect of condition, $\nu = 0$.
@@ -242,7 +242,7 @@ tar_load("sigma_theta")
 tar_load("sigma_epsilon")
 ```
 
-We randomly simulated $K = \{`r n_t`\}$ responses for $I = \{`r n_s`\}$ participants ($\mu = `r mu`$; $\sigma_\alpha = `r sigma_alpha`$; $\nu = \{`r nu`\}$; $\sigma_\theta = `r sigma_theta`$; $\sigma_\epsilon = \{`r sigma_epsilon`\}$) `r max(index)` times each.
+We randomly simulated $K = \{`r paste(n_t, collapse = ", ")`\}$ responses for $I = \{`r paste(n_s, collapse = ", ")`\}$ participants ($\mu = `r mu`$; $\sigma_\alpha = `r sigma_alpha`$; $\nu = \{`r paste(nu, collapse = ", ")`\}$; $\sigma_\theta = `r sigma_theta`$; $\sigma_\epsilon = \{`r paste(sigma_epsilon, collapse = ", ")`\}$) `r max(index)` times each.
 We analyzed the data using mixed models and conducted corresponding repeated-measures ANOVA and paired $t$-test as aggregate analyses.
 Again, Bayes factors quantify evidence for the maximal model against a model that omits the fixed effect of condition, $\nu = 0$.
 
@@ -257,11 +257,8 @@ Again, Bayes factors quantify evidence for the maximal model against a model tha
 #| fig.cap: "(ref:adjustment-correction-comparison-ttest)"
 
 p1 <- tar_read("lm_ttest_summary_plot")
-
 p2 <- tar_read("lm_ttest_corrected_summary_plot")
-
 p3 <- tar_read("lm_ttest_summary_zoom_plot")
-
 p4 <- tar_read("lm_ttest_corrected_summary_zoom_plot")
 
 layout <- "
@@ -282,11 +279,8 @@ CD
 #| fig.cap: "(ref:adjustment-correction-comparison-anova)"
 
 p1 <- tar_read("lm_anova_summary_plot")
-
 p2 <- tar_read("lm_anova_corrected_summary_plot")
-
 p3 <- tar_read("lm_anova_summary_zoom_plot")
-
 p4 <- tar_read("lm_anova_corrected_summary_zoom_plot")
 
 layout <- "

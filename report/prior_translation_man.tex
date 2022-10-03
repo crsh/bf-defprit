@@ -155,7 +155,7 @@
     {}{\InnerPatchFailed}%
   }
 {}{\PatchFailed}
-\keywords{Bayes factor, Mixed model, Hierachical model, t-test, ANOVA, Default prior\newline\indent Word count: 1231}
+\keywords{Bayes factor, Mixed model, Hierachical model, t-test, ANOVA, Default prior\newline\indent Word count: 1259}
 \usepackage{lineno}
 
 \linenumbers
@@ -265,7 +265,7 @@ To test whether this prior adjustment works as intended across all levels of agg
 \hypertarget{simulation}{%
 \subsection{Simulation}\label{simulation}}
 
-We simulated \(K = 100\) trials for \(I = 20\) participants (\(\mu = 1\); \(\sigma_\alpha = 0.50\); \(\nu = \{0, 0.20, and 0.40\}\); \(\sigma_\theta = \{0.10, 0.25, 0.50, 1, 2, 4, and 10\}\); \(\sigma_\epsilon = 1\)).
+We simulated \(K = 100\) trials for \(I = 20\) participants (\(\mu = 1\); \(\sigma_\alpha = 0.50\); \(\nu = \{0, 0.2, 0.4\}\); \(\sigma_\theta = \{0.1, 0.25, 0.5, 1, 2, 4, 10\}\); \(\sigma_\epsilon = 1\)).
 For each combination of simulation parameters, we created six datasets of varying levels of aggregation, \(n = \{1, 2, 5, 10, 25, 50\}\), where \(n = 1\) indicates no aggregation and \(n = 50\) indicates that of the initial 100 trials two means remain per cell.
 Like van Doorn et al. (2021), we generated the data deterministically such that condition and participant means as well as standard errors were identical across all levels of aggregation.
 Bayes factors quantify evidence for the maximal model against a model that omits the fixed effect of condition, \(\nu = 0\).
@@ -354,7 +354,7 @@ To test whether the exact adjustment can be approximated by using a point value 
 \hypertarget{simulation-1}{%
 \subsection{Simulation}\label{simulation-1}}
 
-We randomly simulated \(K = \{5, 25, and 100\}\) responses for \(I = \{20, 50, 100, and 200\}\) participants (\(\mu = 1\); \(\sigma_\alpha = 0.50\); \(\nu = \{0, 0.20, and 0.50\}\); \(\sigma_\theta = 0.50\); \(\sigma_\epsilon = \{0.10, 0.25, 0.50, 1, and 2\}\)) 10 times each.
+We randomly simulated \(K = \{5, 25, 100\}\) responses for \(I = \{20, 50, 100, 200\}\) participants (\(\mu = 1\); \(\sigma_\alpha = 0.50\); \(\nu = \{0, 0.2, 0.5\}\); \(\sigma_\theta = 0.50\); \(\sigma_\epsilon = \{0.1, 0.25, 0.5, 1, 2\}\)) 10 times each.
 We analyzed the data using mixed models and conducted corresponding repeated-measures ANOVA and paired \(t\)-test as aggregate analyses.
 Again, Bayes factors quantify evidence for the maximal model against a model that omits the fixed effect of condition, \(\nu = 0\).
 
