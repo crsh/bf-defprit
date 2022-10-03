@@ -16,8 +16,9 @@ View the report of the simulation results
 
 ## Recommended citation
 
-Aust, van Doorn, & Haaf (2022). Translating priors from linear mixed
-models to repeated-measures ANOVA and paired *t* tests. *PsyArXiv*.
+Aust, F., van Doorn, J., & Haaf, J. M. (2022). Translating priors from
+linear mixed models to repeated-measures ANOVA and paired *t* tests.
+*PsyArXiv*. <https://doi.org/10.31234/osf.io/by2d9>
 
 ## Software requirements
 

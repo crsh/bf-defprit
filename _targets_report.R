@@ -27,8 +27,8 @@ list(
     report
     , "report/prior_translation.qmd"
     , extra_files = c(
-      "_targets_full_aggregation/meta/progress"
-      , "_targets_partial_aggregation/meta/progress"
+      "_targets_full_aggregation/meta/meta"
+      , "_targets_partial_aggregation/meta/meta"
       , "report/references.bib"
     )
     , priority = 1

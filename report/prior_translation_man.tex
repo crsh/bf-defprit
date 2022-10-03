@@ -187,6 +187,8 @@ Frederik Aust, Johnny van Doorn, and Julia Haaf, Psychological Methods, Psycholo
 
 Frederik Austwas supported by an Advanced ERC grant to Eric-Jan Wagenmakers (743086 UNIFY) and Julia M. Haaf was supported by a Veni grant from the NWO (VI.Veni.201G.019).
 
+All code and intermediate results are available at \url{https://github.com/crsh/bf-defprit/}.
+
 The authors made the following contributions. Frederik Aust: Conceptualization, Formal analysis, Investigation, Methodology, Project administration, Software, Visualization, Writing - original draft; Johnny van Doorn: Software, Validation, Writing - original draft; Julia M. Haaf: Funding acquisition, Methodology, Supervision, Validation, Writing - original draft.
 
 Correspondence concerning this article should be addressed to Frederik Aust, Psychology Department, University of Amsterdam, Nieuwe Achtergracht 129-B, 1018 WT Amsterdam, The Netherlands. E-mail: \href{mailto:f.aust@uva.nl}{\nolinkurl{f.aust@uva.nl}}
@@ -194,6 +196,12 @@ Correspondence concerning this article should be addressed to Frederik Aust, Psy
 }
 
 \affiliation{\vspace{0.5cm}\textsuperscript{} University of Amsterdam}
+
+\note{
+
+The work reported here is ongoing.
+
+}
 
 \begin{document}
 \maketitle
@@ -369,12 +377,14 @@ Again, Bayes factors quantify evidence for the maximal model against a model tha
 \caption{\label{fig:adjustment-correction-comparison-anova}Simulation results showing the effect of the approximate adjustment of the prior scale in repeated-measures ANOVAS on Bayes factors compared to the corresponding mixed model (left) and an additional correction of those Bayes factors by error variance \(\sigma_\epsilon^2\) and number of participants \(I\). The transparency of points represents the reciprocal of the estimation error for mixed model Bayes factors (log scale). The grey dotted square (top) highlights the portion of the plot that is shown in more detail in the bottom panels.}
 \end{figure}
 
-When the error variance \(\sigma_\epsilon^2\) was small or the sample size \(I\) was large, the adjustments worked reasonably well, left panels of Figures~@ref(fig: adjustment-correction-comparison-ttest) and @ref(fig: adjustment-correction-comparison-anova).
+When the error variance \(\sigma_\epsilon^2\) was small or the sample size \(I\) was large, the adjustments worked reasonably well, left panels of Figures~\ref{fig:adjustment-correction-comparison-ttest} and \ref{fig:adjustment-correction-comparison-anova}.
 However, compared to the mixed model, in many cases both aggregate analyses produced substantially diverging Bayes factors.
 The divergence increased as (1) the difference in random slope and error variance increased and (2) the number of participants decreased.
+For a detailed breakdown of the results by all varied factors see the online supplementary material at \url{https://github.com/crsh/bf-defprit/}.
 The divergence of Bayes factors was more pronounced in the repeated-measures ANOVA than in the paired \(t\)-test, because priors on both fixed and random intercepts require adjustment.
 
 In an exploratory analysis of the simulation results, we compared several regression models (using AIC and BIC) that expressed the Bayes factors from the mixed model (weighted by the reciprocal of their estimation error) as a function of Bayes factors from the corresponding paired \(t\)-test, sample size \(I\), and error variance \(\sigma_\epsilon^2\).
+For details refer to the online supplementary material at \url{https://github.com/crsh/bf-defprit/}.
 Next, we compared the same set of models for the Bayes factors from repeated-measures ANOVA and found the same winning model.
 The Bayes factors predicted by the selected model,
 
@@ -385,7 +395,7 @@ The Bayes factors predicted by the selected model,
 \end{aligned}
 \]
 
-largely offset divergences between linear mixed model and aggregate analyses, right panels of Figures~@ref(fig: adjustment-correction-comparison-ttest) and @ref(fig: adjustment-correction-comparison-anova).
+largely offset divergences between linear mixed model and aggregate analyses, right panels of Figures~\ref{fig:adjustment-correction-comparison-ttest} and \ref{fig:adjustment-correction-comparison-anova}.
 
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
