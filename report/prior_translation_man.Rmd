@@ -1,0 +1,332 @@
+---
+title      : "Translating default priors from linear mixed models to repeated-measures ANOVA and paired $t$-tests"
+shorttitle : "Translating priors"
+
+author:
+  - name: "Frederik Aust"
+    affiliation: ""
+    role:
+      - "Conceptualization"
+      - "Formal analysis"
+      - "Investigation"
+      - "Methodology"
+      - "Project administration"
+      - "Software"
+      - "Visualization"
+      - "Writing - original draft"
+    corresponding: yes
+    email: "f.aust@uva.nl"
+    address: "Psychology Department, University of Amsterdam, Nieuwe Achtergracht 129-B, 1018 WT Amsterdam, The Netherlands"
+  - name: "Johnny van Doorn"
+    affiliation: ""
+    role:
+      - "Software"
+      - "Validation"
+      - "Writing - original draft"
+    email: "j.b.vandoorn@uva.nl"
+  - name: "Julia M. Haaf"
+    affiliation: ""
+    role:
+      - "Funding acquisition"
+      - "Methodology"
+      - "Supervision"
+      - "Validation"
+      - "Writing - original draft"
+    email: "j.m.haaf@uva.nl"
+
+affiliation:
+  - id: ""
+    institution: "University of Amsterdam"
+
+authornote: |
+  Frederik Aust, Johnny van Doorn, and Julia Haaf, Psychological Methods, Psychology Department, University of Amsterdam.
+  
+  Frederik Austwas supported by an Advanced ERC grant to Eric-Jan Wagenmakers (743086 UNIFY) and Julia M. Haaf was supported by a Veni grant from the NWO (VI.Veni.201G.019).
+  
+keywords          : ["Bayes factor", "Mixed model", "Hierachical model", "t-test", "ANOVA", "Default prior"]
+wordcount         : "1231"
+
+bibliography      : ["references.bib"]
+
+floatsintext      : yes
+linenumbers       : yes
+draft             : yes
+mask              : no
+
+classoption       : "man"
+output            : papaja::apa6_pdf
+---
+
+```{r setup, include = FALSE}
+library("targets")
+
+library("dplyr")
+library("ggplot2")
+library("patchwork")
+```
+
+@vandoorn2021 show that Bayes factors that quantify evidence for fixed effects in mixed models with standardized effect size parameterization [@rouder2012] change when responses are aggregated.
+Their example assumed a simple repeated-measures design with $I$ participants responding $K$ times in each of two conditions.
+The maximal model for these data has random intercepts $\alpha_i$ and random slopes $\theta_i$,
+
+$$
+\begin{aligned}
+y_{ijk} & \sim \mathcal{N}(\mu + \sigma_\epsilon (\alpha_i + x_j (\nu + \theta_i)), \sigma^2_\epsilon) \\ & \\
+\alpha_i & \sim \mathcal{N}(0, g_\alpha) \\
+\nu & \sim \mathcal{N}(0, g_{\nu}) \\
+\theta_i & \sim \mathcal{N}(0, g_\theta) \\ & \\
+g_{\alpha} & \sim \mathcal{IG}(0.5, 0.5~r_{\alpha}^2) \\
+g_{\nu} & \sim \mathcal{IG}(0.5, 0.5~r_{\nu}^2) \\
+g_{\theta} & \sim \mathcal{IG}(0.5, 0.5~r_{\theta}^2) \\ & \\
+(\mu, \sigma^2_\epsilon) & \propto 1/\sigma^2_\epsilon.
+\end{aligned}
+$$
+
+@heck_benefits_2021 speculate that it an approximate adjustment to the prior may be based known decrease in the error variance as a result of aggregating $n$ trials, $\sigma\prime_\epsilon = \frac{\sigma_\epsilon}{\sqrt{n}}$.
+@singmann_statistics_2022 argue that an appropriate adjustment of priors for aggregation is difficult.
+
+It is important to distinguish between two types of aggregation: complete and partial aggregation. 
+Complete aggregation refers to the case where participants contribute only one observation to each level of the factor of interest. 
+Partial aggregation, in contrast, reduces the number of observations but leaves at least two observation for each level of the factor.
+For illustration, consider the case of a 2 $\times$ 2 repeated-measures design:
+Following aggregation, each participant contributes one observation to each cell of the design.
+While this constitutes complete aggregation for the interaction term, multiple observation per participant remain for the analyses of the main effects---observations are pooled over levels of the other factor.
+Both types of aggregation affect residual variance differently.
+
+
+# Partial aggregation
+
+Because in the models considered here priors are placed on standardized effect sizes, a reduction of $\sigma_\epsilon$ increases prior plausibility of relatively large effects.
+The mixed model becomes
+
+$$
+\begin{aligned}
+y\prime_{ijk} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha\prime_i + x_j (\nu\prime + \theta\prime_i)), \sigma\prime_\epsilon^{2}) \\ & \\
+\alpha\prime_i & \sim \mathcal{N}(0, g\prime_\alpha) \\
+\nu\prime & \sim \mathcal{N}(0, g\prime_\nu) \\
+\theta\prime_i & \sim \mathcal{N}(0, g\prime_\theta),
+\end{aligned}
+$$
+
+which implies the following priors,
+
+$$
+\begin{aligned}
+\nu\prime & \sim \mathcal{N}(0, g_{\nu}/\sqrt{n}) \\
+g\prime_\alpha & \sim \mathcal{IG}(0.5, 0.5~r^2_{\alpha}/\sqrt{n}) \\
+g\prime_\theta & \sim\mathcal{IG}(0.5, 0.5~r^2_{\theta}/\sqrt{n}).
+\end{aligned}
+$$
+
+This suggests that equivalent Bayes factors can be obtained by adjusting the prior scales accordingly, $r\prime^2 = r^2 \sqrt{n}$.
+To test whether this prior adjustment works as intended across all levels of aggregation, we conducted a simulation.
+
+
+## Simulation
+
+```{r}
+Sys.setenv(TAR_PROJECT = "partial_aggregation")
+
+tar_load("n_s")
+tar_load("n_t")
+tar_load("mu")
+tar_load("nu")
+tar_load("sigma_alpha")
+tar_load("sigma_theta")
+tar_load("sigma_epsilon")
+```
+
+We simulated $K = `r n_t`$ trials for $I = `r n_s`$ participants ($\mu = `r mu`$; $\sigma_\alpha = `r sigma_alpha`$; $\nu = \{`r nu`\}$; $\sigma_\theta = \{`r sigma_theta`\}$; $\sigma_\epsilon = `r sigma_epsilon`$).
+For each combination of simulation parameters, we created six datasets of varying levels of aggregation, $n = \{1, 2, 5, 10, 25, 50\}$, where $n = 1$ indicates no aggregation and $n = 50$ indicates that of the initial 100 trials two means remain per cell.
+Like @vandoorn2021, we generated the data deterministically such that condition and participant means as well as standard errors were identical across all levels of aggregation.
+Bayes factors quantify evidence for the maximal model against a model that omits the fixed effect of condition, $\nu = 0$.
+
+
+### Results
+
+(ref:partial-aggregation-results) Horizontal lines represent $\log{\mathrm{BF}}$ for each level of $\sigma_\theta$ with $n = 1$ (no aggregation) as reference. $\nu$ denotes the effect size, $\sigma_\alpha$ the random slopes variance, $\sigma_\theta$ the random slopes variance, $\sigma_\epsilon$ the error variance, and $I$ the number of participants, and $K$ the number of trials before aggregation.
+
+```{r partial-aggregation-results}
+#| fig.height: 6
+#| fig.width: 6
+#| fig.cap: "(ref:partial-aggregation-results)"
+
+tar_read("agg_plot")
+```
+
+Our results confirm that the prior adjustment works reasonably well, Figure\ \@ref(fig:partial-aggregation-results).
+However, when an effect was present, the random slope variance $\sigma_\theta^2$ was substantially smaller than the error variance $\sigma_\epsilon^2$, and when only two observations per cell remained, we found Bayes factors to be inflated.
+This inflation, however, was negligible for small and inconsequential for large Bayes factors.
+Thus, in most cases the adjustment of priors for partial aggregation is simple and effective.
+
+# Complete aggregation
+
+Adjusting priors for complete aggregation is more challenging.
+When data are fully aggregated data (i.e., $n = K$), the random slopes variance $\sigma_\theta^2$ becomes confounded with the error variance $\sigma_\epsilon^2$.
+In mixed models the random slope variance is characterized by a probability distribution, which prohibits an exact adjustment of the prior by a simple scaling constant.
+Here, we explore the adequacy of an approximate adjustment using a point value for the random slope variance.
+
+When aggregating each participant's data to a single observation per cell, the data can analyzed in two ways: By modeling participants' (1) cell means using a one-way repeated-measures ANOVA, or by modeling participants' (2) cell mean differences using a paired $t$-test.
+
+## Repeated-measures ANOVA
+
+Aggregation reduces the maximal model to the following,
+
+$$
+\begin{aligned}
+\bar{y}_{ij\cdot} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha\prime_i + x_j \nu\prime), \sigma\prime_\epsilon^2 + \sigma_\theta^2/2) \\
+\alpha\prime_i & \sim \mathcal{N}(0, g_\alpha \sqrt{\sigma_\theta^2}) \\
+\nu\prime & \sim \mathcal{N}(0, g_{\nu} \sqrt{\sigma_\theta^2/2}), 
+\end{aligned}
+$$
+
+where $x_j$ is an indicates the condition using orthonormal effect coding, $\pm \sqrt{2}/2$; the random slopes variance $\sigma_\theta^2$ is scaled by the coding used for $x_j$.
+
+Compared to partial aggregation, the adjustment for the fixed effect requires an additional factor that depends on a weighted ratio of random variance $\sigma^2_\theta$ and error variance $\sigma^2_\epsilon$,
+
+$$
+\begin{aligned}
+\sqrt{\sigma_\epsilon^2/K + \sigma_\theta^2/2} & = \sigma_\epsilon/\sqrt{K} \sqrt{1 + \frac{K\sigma^2_\theta}{2\sigma_\epsilon^2}} \\
+  & = \sigma_\epsilon/\sqrt{K} \sqrt{\frac{2\sigma_\epsilon^2 + K\sigma^2_\theta}{2\sigma_\epsilon^2}} \\
+  & = \sigma_\epsilon/\sqrt{K} \sqrt{\frac{2/K + \sigma^2_\theta/\sigma_\epsilon^2}{2/K}} \\
+\end{aligned}
+$$
+
+For random intercepts, the additional correction factor is obtained by marginalizing over the dummy coded random effect, yielding a weight of 1 for the random slope variance.
+
+## $t$-Test
+
+When analyzing participants' cell mean differences, the random intercept variance cancels out and requires no prior or adjustment.
+The prior adjustment for the fixed effect, however, must account for the different effect coding schemes, i.e. $\pm 0.5$ vs. $\pm \sqrt{2}/2$,
+
+$$
+\begin{aligned}
+\bar{y}_{ij\cdot} - \bar{y}_{ij\cdot} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha_i + 0.5 \nu), \sigma\prime_\epsilon^2) \\
+& - \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha_i - 0.5 \nu), \sigma\prime_\epsilon^2) \\
+  & = \mathcal{N}(\sigma\prime_\epsilon \nu, 2\sigma\prime_\epsilon^2) \\ & \\
+  \nu & \sim \mathcal{N}(0, g_\nu \sqrt{\sigma_\theta^2/4}).
+\end{aligned}
+$$
+
+Rescaling the prior on $\nu$ to the orthonormal scale, $\sqrt{2}\nu$, yields the same adjustment as for the prior in the repeated-measures ANOVA,
+
+$$
+\begin{aligned}
+\sqrt{\sigma_\epsilon^2/K + \sigma_\theta^2/2} & = \sigma_\epsilon/\sqrt{K} \sqrt{1 + \frac{K\sigma^2_\theta}{2\sigma_\epsilon^2}} \\
+  & = \sigma_\epsilon/\sqrt{K} \sqrt{\frac{2\sigma_\epsilon^2 + K\sigma^2_\theta}{2\sigma_\epsilon^2}} \\
+  & = \sigma_\epsilon/\sqrt{K} \sqrt{\frac{2/K + \sigma^2_\theta/\sigma_\epsilon^2}{2/K}}. \\
+\end{aligned}
+$$
+
+As noted above in the linear mixed model $\sigma_\theta^2$ is characterized by a probability distribution.
+To test whether the exact adjustment can be approximated by using a point value in the equation above, we conducted a second simulation.
+
+
+## Simulation
+
+```{r simulation-settings}
+Sys.setenv(TAR_PROJECT = "full_aggregation")
+
+tar_load("index")
+tar_load("n_s")
+tar_load("n_t")
+tar_load("mu")
+tar_load("nu")
+tar_load("sigma_alpha")
+tar_load("sigma_theta")
+tar_load("sigma_epsilon")
+```
+
+We randomly simulated $K = \{`r n_t`\}$ responses for $I = \{`r n_s`\}$ participants ($\mu = `r mu`$; $\sigma_\alpha = `r sigma_alpha`$; $\nu = \{`r nu`\}$; $\sigma_\theta = `r sigma_theta`$; $\sigma_\epsilon = \{`r sigma_epsilon`\}$) `r max(index)` times each.
+We analyzed the data using mixed models and conducted corresponding repeated-measures ANOVA and paired $t$-test as aggregate analyses.
+Again, Bayes factors quantify evidence for the maximal model against a model that omits the fixed effect of condition, $\nu = 0$.
+
+
+### Results
+
+(ref:adjustment-correction-comparison-ttest) Simulation results showing the effect of the approximate adjustment of the prior scale in paired $t$-tests on Bayes factors compared to the corresponding mixed model (left) and an additional correction of those Bayes factors by error variance $\sigma_\epsilon^2$ and number of participants $I$. The transparency of points represents the reciprocal of the estimation error for mixed model Bayes factors (log scale). The grey dotted square (top) highlights the portion of the plot that is shown in more detail in the bottom panels.
+
+<!-- For a detailed breakdown of the results by all varied factors see the online supplementary material at \url{https://github.com/crsh/bf-defprit/}. -->
+
+```{r adjustment-correction-comparison-ttest}
+#| fig.width: 7
+#| fig.height: 7
+#| fig.cap: "(ref:adjustment-correction-comparison-ttest)"
+
+p1 <- tar_read("lm_ttest_summary_plot")
+
+p2 <- tar_read("lm_ttest_corrected_summary_plot")
+
+p3 <- tar_read("lm_ttest_summary_zoom_plot")
+
+p4 <- tar_read("lm_ttest_corrected_summary_zoom_plot")
+
+layout <- "
+AB
+CD
+"
+
+(p1 + labs(tag = NULL) + ggtitle("Approximately adjusted prior")) + (p2 + labs(tag = NULL) + ggtitle(bquote("Additionally corrected for"~sigma[epsilon]~"and"~italic(I)))) +
+  (p3 + theme(axis.text.x = element_text(angle = 45))) + (p4 + theme(axis.text.x = element_text(angle = 45))) + 
+  plot_layout(design = layout, guides = "collect")
+```
+
+(ref:adjustment-correction-comparison-anova) Simulation results showing the effect of the approximate adjustment of the prior scale in repeated-measures ANOVAS on Bayes factors compared to the corresponding mixed model (left) and an additional correction of those Bayes factors by error variance $\sigma_\epsilon^2$ and number of participants $I$. The transparency of points represents the reciprocal of the estimation error for mixed model Bayes factors (log scale). The grey dotted square (top) highlights the portion of the plot that is shown in more detail in the bottom panels.
+
+<!-- For a detailed breakdown of the results by all varied factors see the online supplementary material at \url{https://github.com/crsh/bf-defprit/}. -->
+
+```{r adjustment-correction-comparison-anova}
+#| fig.width: 7
+#| fig.height: 7
+#| fig.cap: "(ref:adjustment-correction-comparison-anova)"
+
+p1 <- tar_read("lm_anova_summary_plot")
+
+p2 <- tar_read("lm_anova_corrected_summary_plot")
+
+p3 <- tar_read("lm_anova_summary_zoom_plot")
+
+p4 <- tar_read("lm_anova_corrected_summary_zoom_plot")
+
+layout <- "
+AB
+CD
+"
+
+(p1 + labs(tag = NULL) + ggtitle("Approximately adjusted prior")) + (p2 + labs(tag = NULL) + ggtitle(bquote("Additionally corrected for"~sigma[epsilon]~"and"~italic(I)))) +
+  (p3 + theme(axis.text.x = element_text(angle = 45))) + (p4 + theme(axis.text.x = element_text(angle = 45))) + 
+  plot_layout(design = layout, guides = "collect")
+```
+
+
+When the error variance $\sigma_\epsilon^2$ was small or the sample size $I$ was large, the adjustments worked reasonably well, left panels of Figures\ \@ref(fig: adjustment-correction-comparison-ttest) and \@ref(fig: adjustment-correction-comparison-anova).
+However, compared to the mixed model, in many cases both aggregate analyses produced substantially diverging Bayes factors.
+The divergence increased as (1) the difference in random slope and error variance increased and (2) the number of participants decreased.
+The divergence of Bayes factors was more pronounced in the repeated-measures ANOVA than in the paired $t$-test, because priors on both fixed and random intercepts require adjustment.
+
+In an exploratory analysis of the simulation results, we compared several regression models (using AIC and BIC) that expressed the Bayes factors from the mixed model (weighted by the reciprocal of their estimation error) as a function of Bayes factors from the corresponding paired $t$-test, sample size $I$, and error variance $\sigma_\epsilon^2$.
+Next, we compared the same set of models for the Bayes factors from repeated-measures ANOVA and found the same winning model.
+The Bayes factors predicted by the selected model,
+
+$$
+\begin{aligned}
+\log\mathrm{BF_{LMM}} = & ~ b_1 \sigma_\epsilon + b_2 \sqrt{\sigma_\epsilon} + b_3 \sqrt{I} + b_4 \sqrt{I} \sigma_\epsilon +\\
+    & ~\log \mathrm{BF} (1 + b_5 \sigma_\epsilon^2 + b_6 \log I + b_7 \sigma_\epsilon^2 \log I),
+\end{aligned}
+$$
+
+largely offset divergences between linear mixed model and aggregate analyses, right panels of Figures\ \@ref(fig: adjustment-correction-comparison-ttest) and \@ref(fig: adjustment-correction-comparison-anova).
+
+# Discussion
+
+We explored approximate translations of default priors between mixed models, repeated-measures ANOVA, and paired $t$-tests to obtain equivalent Bayes factors.
+Although these translations worked reasonably well in the case of partial aggregation, they were less successful for complete aggregation.
+We are currently working on refined adjustments to eliminate the observed discrepancies between mixed models and the corresponding aggregate analyses.
+
+
+\newpage
+
+# References
+
+::: {#refs custom-style="Bibliography"}
+:::

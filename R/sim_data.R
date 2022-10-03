@@ -116,7 +116,7 @@ sim_quantile_data <- function(
       dat_list[[paste0("trials_", K/i)]] <- dat |>
         dplyr::rowwise() |>
         dplyr::mutate(
-          y = list(y + scale(sample(qnorm(ppoints(K/i), sd = 1))) / sqrt(i))
+          y = list(y + scale(sample(qnorm(ppoints(K/i), sd = 1))) / sqrt(i) * sigma_epsilon)
           , t = list(1:(K/i))
           , subject = factor(subject)
           , cond = factor(cond)

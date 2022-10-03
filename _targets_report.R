@@ -39,6 +39,15 @@ list(
     , format = "file"
     , priority = 1
   )
+  , tar_render(
+    report_man
+    , "report/prior_translation_man.Rmd"
+    , knit_root_dir = "report"
+    , intermediates_dir = "report"
+    , output_dir = "report"
+    , params = list(update = report)
+    , priority = 1
+  )
 
   # Spell checks
   , tar_target(
@@ -48,9 +57,9 @@ list(
       , "deterministically", "IG", "ij", "ijk"
       , "multifactorial", "orthonormal", "Rescaling"
       , "Singmann"
-      , "cdot", "frac", "mathcal", "mathrm", "LMM"
+      , "cdot", "frac", "mathcal", "mathrm", "propto", "LMM"
       , "tabset"
-      , "Dockerfile", "RStudio"
+      , "Dockerfile", "RStudio", "PsyArXiv"
     )
   ),
   tar_target(

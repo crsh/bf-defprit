@@ -31,18 +31,10 @@ list(
   , tar_target(mu, 1)
   , tar_target(nu, c(0, 0.2, 0.4))
   , tar_target(sigma_alpha, 0.5)
-  , tar_target(sigma_theta, c(0.1, 0.25, 0.5, 1, 2))
+  , tar_target(sigma_theta, c(0.1, 0.25, 0.5, 1, 2, 4, 10))
   , tar_target(sigma_epsilon, 1)
 
   # Simulate datasets
-  , tar_target(
-    max_n_t
-    , 100
-  )
-  , tar_target(
-    min_n_s
-    , 20
-  )
   , tar_target(
     agg_data_quant_i
     , sim_quantile_data(
@@ -79,7 +71,7 @@ list(
         as.data.frame(x)
         , rscaleFixed = x@numerator[[1]]@prior$rscale$fixed
         , rscaleRandom = x@numerator[[1]]@prior$rscale$random
-        , n_s = min_n_s
+        , n_s = n_s
         , n_t = trial_batches
         , nu = nu
         , sigma_theta = sigma_theta
@@ -99,8 +91,8 @@ list(
       , whichRandom = "subject"
       , neverExclude = "subject"
       , whichModels = "all"
-      , rscaleFixed = 0.5 * sqrt(max_n_t / trial_batches)
-      , rscaleRandom = 1 * sqrt(max_n_t / trial_batches)
+      , rscaleFixed = 0.5 * sqrt(n_t / trial_batches)
+      , rscaleRandom = 1 * sqrt(n_t / trial_batches)
       , iterations = 1e5
     )
 
@@ -109,7 +101,7 @@ list(
         as.data.frame(x)
         , rscaleFixed = x@numerator[[1]]@prior$rscale$fixed
         , rscaleRandom = x@numerator[[1]]@prior$rscale$random
-        , n_s = min_n_s
+        , n_s = n_s
         , n_t = trial_batches
         , nu = nu
         , sigma_theta = sigma_theta
@@ -133,13 +125,24 @@ list(
         mutate(prior = relevel(factor(prior), "Constant")) |>
         mutate(sigma_theta = factor(sigma_theta))
 
+      se_labels <- c("1/10", "1/4", "1/2", "1", "2", "4", "10")
+
       plot_dat |>
         ggplot() +
-        aes(x = n_t, y = log(bf), linetype = sigma_theta, group = sigma_theta, shape = sigma_theta, fill = sigma_theta, color = sigma_theta) +
+        aes(x = n_t, y = log(bf), linetype = sigma_theta, group = sigma_theta, fill = sigma_theta, color = sigma_theta) + # , shape = sigma_theta
         geom_hline(data = plot_dat |> filter(n_t == 100), aes(yintercept = log(bf)), color = grey(0.75), size = 0.25) +
         geom_line() +
         geom_errorbar(aes(ymin = log(bf - bf*error), ymax = log(bf + bf*error)), width = 0.2, linetype = "solid") +
-        geom_point(size = 3.5, color = "white") +
+        geom_point(size = 3.5, color = "white", shape = 21) +
+        # ggh4x::facet_grid2(
+        #   nu ~ prior
+        #   , scales = "free"
+        #   , labeller = label_bquote(
+        #     cols = .(as.character(prior))~"prior"
+        #     , rows = nu == .(papaja::printnum(nu, digits = 1))
+        #   )
+        #   , independent = "y"
+        # ) +
         facet_grid(
           nu ~ prior
           , scales = "free_y"
@@ -150,20 +153,21 @@ list(
         ) +
         scale_x_continuous(trans = "log", breaks = c(2, 5, 10, 20, 50, 100), labels = ~ 100/.x) +
         scale_y_continuous(expand = expansion(0.1, 0)) +
-        scale_color_viridis_d(end = 0.8, direction = 1) +
-        scale_fill_viridis_d(end = 0.8, direction = 1) +
-        scale_shape_manual(values = 21:25) +
+        scale_color_viridis_d(end = 0.8, direction = 1, labels = se_labels) +
+        scale_fill_viridis_d(end = 0.8, direction = 1, labels = se_labels) +
+        scale_linetype_discrete(labels = se_labels) +
+        # scale_shape_manual(values = 21:25) +
         labs(
           x = bquote(italic(n))
           , y = "log(BF)"
           , color = bquote(sigma[theta])
           , fill = bquote(sigma[theta])
           , linetype = bquote(sigma[theta])
-          , shape = bquote(sigma[theta])
+          # , shape = bquote(sigma[theta])
           , tag = bquote(
             atop(
               atop(sigma[alpha]*" "== " 0.5", sigma[epsilon]*" "== " 1.0")
-              , atop(italic(I)*" "== " "*.(min_n_s), italic(K)*" "== " "*.(max_n_t))
+              , atop(italic(I)*" "== " "*.(n_s), italic(K)*" "== " "*.(n_t))
             )
           )
         ) +

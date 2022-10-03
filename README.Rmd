@@ -7,9 +7,9 @@ library("targets")
 ```
 
 
-# Supplement to *Bayes Factors for Mixed Models: Perspective on Responses*
+# Translating priors from linear mixed models to repeated-measures ANOVA and paired *t* tests
 
-**Frederik Aust & Julia M. Haaf**
+**Frederik Aust, Johnny van Doorn & Julia M. Haaf**
 
 This repository contains research products associated with the publication.
 We provide a Dockerfile, R scripts, and a Quarto document to reproduce the reported simulations.
@@ -21,7 +21,7 @@ View the report of the simulation results [here](https://htmlpreview.github.io/?
 
 ## Recommended citation
 
-van Doorn et al. (in prep). Bayes Factors for Mixed Models: Perspective on Responses. *Computational Brain & Behavior*.
+Aust, van Doorn, & Haaf (2022). Translating priors from linear mixed models to repeated-measures ANOVA and paired *t* tests. *PsyArXiv*.
 
 ## Software requirements
 

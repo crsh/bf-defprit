@@ -1,8 +1,7 @@
 ---
-title: "Translating priors from linear mixed models to repeated-measures ANOVA and paired $t$ tests"
-subtitle: "Supplement to *Bayes Factors for Mixed Models: Perspective on Responses*"
-author: "Frederik Aust & Julia Haaf"
-date: "2022-09-27"
+title: "Translating priors from linear mixed models to repeated-measures ANOVA and paired $t$-tests"
+author: "Frederik Aust, Johnny van Doorn, & Julia Haaf"
+date: "2022-10-03"
 
 bibliography: ["references.bib"]
 
@@ -53,13 +52,13 @@ y_{ijk} & \sim \mathcal{N}(\mu + \sigma_\epsilon (\alpha_i + x_j (\nu + \theta_i
 g_{\alpha} & \sim \mathcal{IG}(0.5, 0.5~r_{\alpha}^2) \\
 g_{\nu} & \sim \mathcal{IG}(0.5, 0.5~r_{\nu}^2) \\
 g_{\theta} & \sim \mathcal{IG}(0.5, 0.5~r_{\theta}^2) \\ & \\
-(\mu, \sigma^2_\epsilon) & = 1/\sigma^2_\epsilon.
+(\mu, \sigma^2_\epsilon) & \propto 1/\sigma^2_\epsilon.
 \end{aligned}
 $$
 
 
 
-# Reduced error variance through aggregation
+# Partial aggregation
 
 Because priors are placed on standardized effect sizes, a reduction of $\sigma_\epsilon$ increases prior plausibility of larger effect sizes.
 In our Example 1, measurement error decreases as the number of aggregated trials $n$ increases, $\sigma\prime_\epsilon = \frac{\sigma_\epsilon}{\sqrt{n}}$,
@@ -68,10 +67,10 @@ In our Example 1, measurement error decreases as the number of aggregated trials
 
 $$
 \begin{aligned}
-y_{ijk} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha_i + x_j (\nu + \theta_i)), \sigma\prime_\epsilon^{2}) \\ & \\
-\alpha_i & \sim \mathcal{N}(0, g_\alpha) \\
-\nu & \sim \mathcal{N}(0, g_\theta) \\
-\theta_i & \sim \mathcal{N}(0, g_\theta).
+y\prime_{ijk} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha\prime_i + x_j (\nu\prime + \theta\prime_i)), \sigma\prime_\epsilon^{2}) \\ & \\
+\alpha\prime_i & \sim \mathcal{N}(0, g\prime_\alpha) \\
+\nu\prime & \sim \mathcal{N}(0, g\prime_\nu) \\
+\theta\prime_i & \sim \mathcal{N}(0, g\prime_\theta).
 \end{aligned}
 $$
 
@@ -83,9 +82,9 @@ This further implies the priors
 
 $$
 \begin{aligned}
-\nu & \sim \mathcal{N}(0, g_{\nu}/\sqrt{n}) \\
-g_\alpha & \sim \mathcal{IG}(0.5, 0.5~r^2_{\alpha}/\sqrt{n}) \\
-g_\theta & \sim\mathcal{IG}(0.5, 0.5~r^2_{\theta}/\sqrt{n}).
+\nu\prime & \sim \mathcal{N}(0, g_{\nu}/\sqrt{n}) \\
+g\prime_\alpha & \sim \mathcal{IG}(0.5, 0.5~r^2_{\alpha}/\sqrt{n}) \\
+g\prime_\theta & \sim\mathcal{IG}(0.5, 0.5~r^2_{\theta}/\sqrt{n}).
 \end{aligned}
 $$
 
@@ -102,8 +101,11 @@ Hence, to obtain equivalent Bayes factors the prior scales should be adjusted ac
 
 
 To test whether this prior adjustment works as intended across all levels of aggregation, we conducted a small simulation for the balanced null comparison.
-We simulated $K = 100$ trials for $I = 20$ participants ($\mu = 1$; $\sigma_\alpha = 0.5$; $\nu = \{0, 0.2, 0.4\}$; $\sigma_\theta = \{0.1, 0.25, 0.5, 1, 2\}$; $\sigma_\epsilon = 1$).
+We simulated $K = 100$ trials for $I = 20$ participants ($\mu = 1$; $\sigma_\alpha = 0.5$; $\nu = \{0, 0.2, 0.4\}$; $\sigma_\theta = \{0.1, 0.25, 0.5, 1, 2, 4, 10\}$; $\sigma_\epsilon = 1$).
 As in our Example 1, the data were generated deterministically with identical condition and participant means as well as standard errors across all levels of aggregation ($n$).
+Bayes factors quantify evidence for the maximal model against a model that omits the fixed effect of condition, $\nu = 0$.
+
+<!-- Random slope variances -->
 
 
 ::: {.cell}
@@ -116,29 +118,36 @@ As in our Example 1, the data were generated deterministically with identical co
 Horizontal lines represent $\log{\mathrm{BF}}$ for each level of $\sigma_\theta$ with $n = 1$ (no aggregation) as reference.
 The results confirm that the prior adjustment works well.
 Only when an effect is present and the random slope variance $\sigma_\theta^2$ is small, we observed a minor inflation of the Bayes factor for $n = 50$. This bias scaled with $\log{BF}$ and was negligible for small and inconsequential for large Bayes factors.
+We are currently investigating a refined adjustment to eliminate the inflation.
 
-# Full aggregation
 
-When aggregating each participant's data to a single observation per cell the data can analyzed in two ways: By modeling participants' (1) cell means using a one-way repeated-measures ANOVA, or (2) cell mean differences using a paired $t$-test.
+# Complete aggregation
+
+Adjusting priors for complete aggregation is more challenging.
+When data are fully aggregated data (i.e., $n = K$), the random slopes variance $\sigma_\theta^2$ becomes confounded with the error variance $\sigma_\epsilon^2$.
+In mixed models the random slope variance is characterized by a probability distribution, which prohibits an exact adjustment of the prior by a simple scaling constant.
+Here, we explore the adequacy of an approximate adjustment using a point value for the random slope variance.
+
+When aggregating each participant's data to a single observation per cell, the data can analyzed in two ways: By modeling participants' (1) cell means using a one-way repeated-measures ANOVA, or by modeling participants' (2) cell mean differences using a paired $t$-test.
 
 ## Repeated-measures ANOVA
 
-When data are fully aggregated data (i.e., $n = K$), the random slopes variance $\sigma_\theta^2$ folds into the error variance $\sigma_\epsilon^2$.
-That is, Model 6 reduces to Model 4,
+Aggregation reduces the maximal model to the following,
 
 
 
 $$
 \begin{aligned}
-\bar{y}_{ij\cdot} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha_i + x_j \nu), \sigma\prime_\epsilon^2 + \sigma_\theta^2/2) \\
-\alpha_i & \sim \mathcal{N}(0, g_\alpha \sqrt{\sigma_\theta^2}) \\
-\nu & \sim \mathcal{N}(0, g_{\nu} \sqrt{\sigma_\theta^2/2}).
+\bar{y}_{ij\cdot} & \sim \mathcal{N}(\mu + \sigma\prime_\epsilon (\alpha\prime_i + x_j \nu\prime), \sigma\prime_\epsilon^2 + \sigma_\theta^2/2) \\
+\alpha\prime_i & \sim \mathcal{N}(0, g_\alpha \sqrt{\sigma_\theta^2}) \\
+\nu\prime & \sim \mathcal{N}(0, g_{\nu} \sqrt{\sigma_\theta^2/2}), 
 \end{aligned}
 $$
 
 
 
-The random slopes variance $\sigma_\theta^2$ is scaled by the orthonormal effect coding, $\pm \sqrt{2}/2$.
+where $x_j$ is an indicates the condition using orthonormal effect coding, $\pm \sqrt{2}/2$; the random slopes variance $\sigma_\theta^2$ is scaled by the coding used for $x_j$.
+
 Compared to partial aggregation, the adjustment for the fixed effect requires an additional factor that depends on a weighted ratio of random variance $\sigma^2_\theta$ and error variance $\sigma^2_\epsilon$,
 
 
@@ -293,6 +302,9 @@ We randomly simulated $K = \{5, 25, 100\}$ responses for $I = \{20, 50, 100, 200
 
 </details>
 :::
+
+
+<!-- Check ANOVA vs t-test when fixing s_e but varying either s_t or s_a -->
 
 When the error variance $\sigma_\epsilon^2$ is small or the sample size $I$ is large, the adjustments works well.
 However, compared to the linear mixed model, both aggregate analyses produced diverging Bayes factors.
