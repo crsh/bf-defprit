@@ -18,12 +18,11 @@
 #' @seealso [BayesFactor::ttestBF()]
 #' @export
 
-correct_ttest_bf <- function(x, n_s, sigma_theta, sigma_epsilon) {
+correct_ttest_bf <- function(x, n_s, sigma_epsilon) {
   df <- data.frame(
     bf2 = x
     , logbf2 = log(x)
     , n_s = n_s
-    , sigma_theta = sigma_theta
     , sigma_epsilon = sigma_epsilon
   )
 

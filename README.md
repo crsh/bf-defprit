@@ -97,8 +97,7 @@ graph LR
 ``` mermaid
 graph LR
   subgraph legend
-    x7420bd9270f8d27d([""Up to date""]):::uptodate --- x0a52b03877696646([""Outdated""]):::outdated
-    x0a52b03877696646([""Outdated""]):::outdated --- x70a5fa6bea6f298d[""Pattern""]:::none
+    x7420bd9270f8d27d([""Up to date""]):::uptodate --- x70a5fa6bea6f298d[""Pattern""]:::none
     x70a5fa6bea6f298d[""Pattern""]:::none --- xbf4603d6c2c2ad6b([""Stem""]):::none
     xbf4603d6c2c2ad6b([""Stem""]):::none --- x5bffbffeae195fc9{{""Object""}}:::none
     x5bffbffeae195fc9{{""Object""}}:::none --- xf0bce276fe2b9d3e>""Function""]:::none
@@ -106,10 +105,11 @@ graph LR
   subgraph Graph
     xb115d6582cfd771d{{"default_scales"}}:::uptodate --> xe86e0eb83252331d>"logbf_plot"]:::uptodate
     xb115d6582cfd771d{{"default_scales"}}:::uptodate --> xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate
+    xeff710d759de9979>"fit_correction_model"]:::uptodate --> xb5340722599e9c58>".correct_bf"]:::uptodate
     x98aca552ca5e76e9{{"default_theme"}}:::uptodate --> xe86e0eb83252331d>"logbf_plot"]:::uptodate
     x98aca552ca5e76e9{{"default_theme"}}:::uptodate --> xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate
     x98aca552ca5e76e9{{"default_theme"}}:::uptodate --> x061b7c77ec2aea53>"logbf_trend_plot"]:::uptodate
-    x1771563b5781393f>"get_trial_batches"]:::uptodate --> x8a751a0886aa2602>"sim_quantile_data"]:::outdated
+    x1771563b5781393f>"get_trial_batches"]:::uptodate --> x8a751a0886aa2602>"sim_quantile_data"]:::uptodate
     x329b0a648be700a4["anova_bf"]:::uptodate --> x944705ecb5bda702(["ttest_anova_plot"]):::uptodate
     xe86e0eb83252331d>"logbf_plot"]:::uptodate --> x944705ecb5bda702(["ttest_anova_plot"]):::uptodate
     xeaf79493baa34293(["n_s"]):::uptodate --> x944705ecb5bda702(["ttest_anova_plot"]):::uptodate
@@ -130,7 +130,7 @@ graph LR
     x061b7c77ec2aea53>"logbf_trend_plot"]:::uptodate --> xee8c11d2796b1550(["ttest_anova_trend_plot"]):::uptodate
     xeaf79493baa34293(["n_s"]):::uptodate --> xee8c11d2796b1550(["ttest_anova_trend_plot"]):::uptodate
     x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> xee8c11d2796b1550(["ttest_anova_trend_plot"]):::uptodate
-    x6dc4618e710ead06>"correct_bf"]:::uptodate --> xa00237f46a787f98(["lm_ttest_logbf"]):::uptodate
+    xb5340722599e9c58>".correct_bf"]:::uptodate --> xa00237f46a787f98(["lm_ttest_logbf"]):::uptodate
     x4abc4a40bd190013["lm_bf"]:::uptodate --> xa00237f46a787f98(["lm_ttest_logbf"]):::uptodate
     x4df3f0b4865e9d1f["ttest_bf"]:::uptodate --> xa00237f46a787f98(["lm_ttest_logbf"]):::uptodate
     x3eacaf6486c5145a["data_i"]:::uptodate --> x4abc4a40bd190013["lm_bf"]:::uptodate
@@ -160,8 +160,8 @@ graph LR
     x738f2179468d4542(["sigma_theta"]):::uptodate --> x3eacaf6486c5145a["data_i"]:::uptodate
     x8c8574439c0fb002>"sim_data"]:::uptodate --> x3eacaf6486c5145a["data_i"]:::uptodate
     x04e94ee208381956(["index"]):::uptodate --> x3eacaf6486c5145a["data_i"]:::uptodate
+    xb5340722599e9c58>".correct_bf"]:::uptodate --> x90c50cbdfe0d5b74(["lm_anova_logbf"]):::uptodate
     x329b0a648be700a4["anova_bf"]:::uptodate --> x90c50cbdfe0d5b74(["lm_anova_logbf"]):::uptodate
-    x6dc4618e710ead06>"correct_bf"]:::uptodate --> x90c50cbdfe0d5b74(["lm_anova_logbf"]):::uptodate
     x4abc4a40bd190013["lm_bf"]:::uptodate --> x90c50cbdfe0d5b74(["lm_anova_logbf"]):::uptodate
     x4abc4a40bd190013["lm_bf"]:::uptodate --> x4ad37dca8e198589(["lm_ttest_summary_plot"]):::uptodate
     xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate --> x4ad37dca8e198589(["lm_ttest_summary_plot"]):::uptodate
@@ -224,17 +224,17 @@ graph LR
     xcdb2dd46db4ed9e6>"logbf_summary_plot"]:::uptodate --> x926ff8e74f68255b(["lm_ttest_corrected_summary_plot"]):::uptodate
     xeaf79493baa34293(["n_s"]):::uptodate --> x926ff8e74f68255b(["lm_ttest_corrected_summary_plot"]):::uptodate
     x3eacaf6486c5145a["data_i"]:::uptodate --> x4132bef5cada5de0["agg_data_i"]:::uptodate
+    xf9cc2d69c567e409>"correct_ttest_bf"]:::uptodate --> xf9cc2d69c567e409>"correct_ttest_bf"]:::uptodate
     xd51e323eb90213dd{{"project_packages"}}:::uptodate --> xd51e323eb90213dd{{"project_packages"}}:::uptodate
   end
   classDef uptodate stroke:#000000,color:#ffffff,fill:#354823;
-  classDef outdated stroke:#000000,color:#000000,fill:#78B7C5;
   classDef none stroke:#000000,color:#000000,fill:#94a4ac;
   linkStyle 0 stroke-width:0px;
   linkStyle 1 stroke-width:0px;
   linkStyle 2 stroke-width:0px;
   linkStyle 3 stroke-width:0px;
-  linkStyle 4 stroke-width:0px;
   linkStyle 125 stroke-width:0px;
+  linkStyle 126 stroke-width:0px;
 ```
 
 ### Report
@@ -250,8 +250,8 @@ graph LR
   subgraph Graph
     x6e52cb0f1668cc22(["readme"]):::started --> x5a4cc06fc4a3b7ee(["readme_rmd"]):::outdated
     xe0fba61fbc506510(["report"]):::uptodate --> x8a06cbfe0c910599(["report_man"]):::uptodate
-    x318ca994c4bb593a(["report_md"]):::uptodate --> xe6fb6b2c93ead02c(["spellcheck_report"]):::uptodate
-    x4ffa27198e787466(["spellcheck_exceptions"]):::uptodate --> xe6fb6b2c93ead02c(["spellcheck_report"]):::uptodate
+    x318ca994c4bb593a(["report_md"]):::uptodate --> xe6fb6b2c93ead02c(["spellcheck_report"]):::outdated
+    x4ffa27198e787466(["spellcheck_exceptions"]):::uptodate --> xe6fb6b2c93ead02c(["spellcheck_report"]):::outdated
     x5a4cc06fc4a3b7ee(["readme_rmd"]):::outdated --> xf1a660a3e2076bea(["spellcheck_readme"]):::outdated
     x4ffa27198e787466(["spellcheck_exceptions"]):::uptodate --> xf1a660a3e2076bea(["spellcheck_readme"]):::outdated
     xe0fba61fbc506510(["report"]):::uptodate --> x318ca994c4bb593a(["report_md"]):::uptodate
