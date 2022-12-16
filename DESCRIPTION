@@ -1,8 +1,9 @@
-Package: bf-defprit
+Package: defprit
 Title: Explore Bayes Factors for Mixed Models
 Version: 0.1.0
 Authors@R: 
     person("Frederik", "Aust", role = c("aut", "cre"),
+           email = "frederik.aust@uni-koeln.de",
            comment = c(ORCID = "0000-0003-4900-788X"))
 Description: Functions to run simulations on translations of prior scales from
   linear mixed models with standardized effect size parameterization to
@@ -14,7 +15,7 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 SystemRequirements: Rendering the report requires Quarto, running the Docker
-  container is requires Docker, but is optional.
+  container requires Docker, but is optional.
 Imports:
     targets (>= 0.13.4),
     tarchetypes (>= 0.7.1),
@@ -37,3 +38,5 @@ Imports:
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Depends: 
+    R (>= 2.10)

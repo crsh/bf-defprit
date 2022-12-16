@@ -395,12 +395,12 @@ list(
   # Bayes factor correction
   , tar_target(
     lm_ttest_logbf
-    , correct_bf(lm_bf, ttest_bf)
+    , .correct_bf(lm_bf, ttest_bf)
     , packages = c("dplyr")
   )
   , tar_target(
     lm_anova_logbf
-    , correct_bf(lm_bf, anova_bf)
+    , .correct_bf(lm_bf, anova_bf)
     , packages = c("dplyr")
   )
 

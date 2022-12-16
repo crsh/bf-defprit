@@ -1,0 +1,7 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^data-raw$
+^_
+^.local$
+^.cache$
+^.config$
